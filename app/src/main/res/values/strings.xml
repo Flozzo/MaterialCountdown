@@ -4,7 +4,14 @@
     <string name="main_title">Events</string>
 
     <string name="event_name">Event name</string>
+    <string name="description">Description</string>
     <string name="save">Save</string>
+    <string name="category">Category</string>
+    <string name="set_category">Set the event category</string>
+    <string name="date">Date</string>
+    <string name="set_date">Set the event date</string>
+    <string name="time">Time</string>
+    <string name="set_time">Set the event time (optional)</string>
 
     <!--Category related strings-->
     <string name="academic">Academic</string>
@@ -18,5 +25,6 @@
     <string name="travel">Travel</string>
     <string name="work">Work</string>
     <string name="title_activity_new_event">New Event</string>
+    <string name="show_notifications">Show Notifications</string>
 
 </resources>
