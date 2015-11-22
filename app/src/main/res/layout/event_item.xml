@@ -1,0 +1,39 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/circle_drawable"
+        android:src="@drawable/ic_new_event"/>
+
+    <TextView
+        android:id="@+id/event_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:layout_marginLeft="72dp"
+        android:text="Event Name"
+        android:textSize="16sp"
+        android:textColor="@color/text_primary"/>
+
+    <TextView
+        android:id="@+id/course_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="72dp"
+        android:paddingBottom="16dp"
+        android:layout_alignParentBottom="true"
+        android:text="01 January 1970"
+        android:textSize="14sp"
+        android:textColor="@color/text_secondary"/>
+
+
+
+</RelativeLayout>

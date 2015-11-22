@@ -2,4 +2,17 @@
     <string name="app_name">Material Countdown</string>
     <string name="action_settings">Settings</string>
     <string name="main_title">Events</string>
+
+    <!--Category related strings-->
+    <string name="academic">Academic</string>
+    <string name="birthday">Birthday</string>
+    <string name="child">Child</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="relaxation">Relaxation</string>
+    <string name="product_release">Release Date</string>
+    <string name="financial">Financial</string>
+    <string name="sport">Sport</string>
+    <string name="travel">Travel</string>
+    <string name="work">Work</string>
+
 </resources>
