@@ -14,12 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.oxapps.materialcountdown.db.EventDbHelper;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -36,6 +38,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class NewEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+    @Bind(R.id.tv_new_event_title) EditText mTitleView;
+    @Bind(R.id.tv_new_event_desc) EditText mDescriptionView;
     @Bind(R.id.new_event_category) RelativeLayout mCategoryView;
     @Bind(R.id.tv_set_category) TextView mSetCategoryView;
     @Bind(R.id.tv_set_date) TextView mSetDateView;
@@ -44,8 +48,6 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
 
     private Category mCategory;
     private Calendar mCalendar;
-    private long mSetDate = 43200000L; //Init set time to be 0
-    private long mSetTime = 43200000L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +57,15 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mCalendar = new GregorianCalendar(0,0,0,0,0);
+        initTime();
     }
 
     private void initTime() {
+        mCalendar = new GregorianCalendar();
+        mCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        mCalendar.set(Calendar.MINUTE, 0);
+        mCalendar.set(Calendar.SECOND, 0);
+        mCalendar.set(Calendar.MILLISECOND, 0);
     }
 
     @Override
@@ -87,9 +94,11 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
     @OnClick(R.id.new_event_date)
     public void setDate() {
         Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_YEAR, 1);
         DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(NewEventActivity.this, cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
                 cal.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.setMinDate(cal);
         datePickerDialog.show(getFragmentManager(), "Date picker");
     }
 
@@ -109,10 +118,27 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_save) {
+            if (!mCalendar.after(Calendar.getInstance())) {
+                //TODO: No date set
+            } else if(mCategory == null) {
+                //TODO: No category set
+            } else if(isEmpty(mTitleView)) {
+                mTitleView.setError(getString(R.string.no_title_set));
+            } else {
+                String name = mTitleView.getText().toString().trim();
+                String description = mDescriptionView.getText().toString().trim();
+                Event event = new Event(name, description, mCalendar.getTimeInMillis(), mCategory.ordinal());
+                EventDbHelper helper = new EventDbHelper(NewEventActivity.this);
+                helper.addEvent(event);
+            }
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean isEmpty(EditText editText) {
+        return editText.getText().toString().trim().length() == 0;
     }
 
     @Override

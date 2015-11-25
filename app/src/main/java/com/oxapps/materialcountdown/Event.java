@@ -6,20 +6,20 @@ package com.oxapps.materialcountdown;
 public class Event {
     private int id;
     private String name;
+    private String description;
     private long endTime;
     private int category;
 
-    public Event(String name, long endTime, int category) {
+    public Event(String name, String description, long endTime, int category) {
         this.name = name;
+        this.description = description;
         this.endTime = endTime;
         this.category = category;
     }
 
-    public Event(int id, String name, long endTime, int category) {
+    public Event(int id, String description, String name, long endTime, int category) {
+        this(name, description, endTime, category);
         this.id = id;
-        this.name = name;
-        this.endTime = endTime;
-        this.category = category;
     }
 
     public String getName() {
@@ -33,4 +33,6 @@ public class Event {
     public int getCategory() {
         return category;
     }
+
+    public String getDescription() { return description;}
 }

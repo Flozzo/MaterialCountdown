@@ -20,6 +20,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     private static final String TABLE_NAME = "events";
     private static final String KEY_ID = "_id";
     private static final String KEY_NAME = "name";
+    private static final String KEY_DESC = "description";
     private static final String KEY_CATEGORY = "category";
     private static final String KEY_END = "end";
 
@@ -32,7 +33,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "("
-                + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_NAME + " TEXT, " + KEY_CATEGORY + " TEXT, "+ KEY_END + " INTEGER);";
+                + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_NAME + " TEXT, " + KEY_DESC + " TEXT, " + KEY_CATEGORY + " TEXT, "+ KEY_END + " INTEGER);";
         db.execSQL(CREATE_TABLE);
     }
 
@@ -45,6 +46,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, event.getName());
+        values.put(KEY_DESC, event.getDescription());
         values.put(KEY_END, event.getEndTime());
         values.put(KEY_CATEGORY, event.getCategory());
         boolean success = (db.insert(TABLE_NAME, null, values) != -1L);
@@ -54,12 +56,12 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
     public ArrayList<Event> getEvents() {
         SQLiteDatabase db = getReadableDatabase();
-        String[] columns = new String[]{KEY_NAME, KEY_END, KEY_CATEGORY};
+        //String[] columns = new String[]{KEY_NAME, KEY_DESC, KEY_END, KEY_CATEGORY};
         String selection = KEY_END + " >= " + System.currentTimeMillis();
-        Cursor cursor = db.query(TABLE_NAME,columns, selection, null, null, null, KEY_END + " ASC");
+        Cursor cursor = db.query(TABLE_NAME,null , selection, null, null, null, KEY_END + " ASC");
         ArrayList<Event> events = new ArrayList<>();
         while(cursor.moveToNext()) {
-            events.add(new Event(cursor.getString(0), cursor.getLong(1), cursor.getInt(2)));
+            events.add(new Event(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getLong(3), cursor.getInt(4)));
         }
         cursor.close();
         db.close();
@@ -70,7 +72,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         String selection = KEY_ID + " = " + id;
         Cursor cursor = db.query(TABLE_NAME, null, selection, null, null, null, null);
-        Event event = new Event(cursor.getInt(0), cursor.getString(1), cursor.getLong(2), cursor.getInt(3));
+        Event event = new Event(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getLong(3), cursor.getInt(4));
         cursor.close();
         db.close();
         return event;
