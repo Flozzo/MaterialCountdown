@@ -20,11 +20,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="72dp"
+        android:background="?android:attr/selectableItemBackground"
         android:id="@+id/new_event_category">
+
         <ImageView
             android:id="@+id/iv_new_event_category"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            style="@style/MaterialListIcon"
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_set_category"/>
 
@@ -52,11 +53,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="72dp"
+        android:background="?android:attr/selectableItemBackground"
         android:id="@+id/new_event_date">
         <ImageView
             android:id="@+id/iv_new_event_date"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            style="@style/MaterialListIcon"
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_set_date"/>
 
@@ -84,11 +85,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="72dp"
+        android:background="?android:attr/selectableItemBackground"
         android:id="@+id/new_event_time">
         <ImageView
             android:id="@+id/iv_new_event_time"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            style="@style/MaterialListIcon"
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_set_time"/>
 
@@ -112,6 +113,7 @@
             android:textSize="14sp"
             android:textColor="@color/text_secondary"/>
     </RelativeLayout>
+
 
     <!--<CheckBox
         android:layout_width="match_parent"

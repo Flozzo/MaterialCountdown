@@ -8,8 +8,7 @@
 
     <ImageView
         android:id="@+id/iv_category_logo"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        style="@style/MaterialListIcon"
         android:layout_marginTop="8dp"
         android:src="@drawable/ic_new_event"/>
 
