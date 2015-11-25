@@ -15,14 +15,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.fab) FloatingActionButton floatingActionButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = ButterKnife.findById(MainActivity.this, R.id.toolbar_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
     }
