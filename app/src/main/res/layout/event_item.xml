@@ -34,34 +34,40 @@
         android:maxLines="1"
         android:layout_alignParentBottom="true"
         tools:text="Description goes here yes very good"
-        android:layout_toLeftOf="@+id/event_days_remaining"
+        android:layout_toLeftOf="@+id/rl_event_days"
         android:textSize="14sp"
         android:textColor="@color/text_secondary"/>
 
-    <TextView
-        android:id="@+id/event_days"
+    <RelativeLayout
+        android:id="@+id/rl_event_days"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="22"
+        android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="16dp"
-        android:layout_alignLeft="@+id/event_days_remaining"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:textColor="@color/text_primary"/>
+        android:layout_marginLeft="16dp">
 
-    <TextView
-        android:id="@+id/event_days_remaining"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="@string/days_remaining"
-        android:layout_marginLeft="16dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:textSize="14sp"
-        android:textColor="@color/text_secondary"/>
+        <TextView
+            android:id="@+id/event_days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="22"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/text_primary" />
+
+        <TextView
+            android:id="@+id/event_days_remaining"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            tools:text="@string/days_remaining"
+            android:layout_alignParentBottom="true"
+            android:textSize="14sp"
+            android:textColor="@color/text_secondary" />
+    </RelativeLayout>
 
 
 </RelativeLayout>
