@@ -80,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Map<String, String>> events) {
             super.onPostExecute(events);
-            String[] from = new String[]{EventDbHelper.KEY_NAME, EventDbHelper.KEY_DESC, EventDbHelper.KEY_END, EventDbHelper.KEY_CATEGORY};
-            int[] to = new int[]{R.id.event_name, R.id.event_desc, R.id.event_days, R.id.iv_event_logo};
+            String[] from = new String[]{EventDbHelper.KEY_NAME, EventDbHelper.KEY_DESC, EventDbHelper.KEY_END, EventDbHelper.KEY_CATEGORY, EventDbHelper.DAY};
+            int[] to = new int[]{R.id.event_name, R.id.event_desc, R.id.event_days, R.id.iv_event_logo, R.id.event_days_remaining};
             SimpleAdapter adapter = new SimpleAdapter(MainActivity.this, events, R.layout.event_item, from, to);
             final Category[] categories = Category.values();
             adapter.setViewBinder(new SimpleAdapter.ViewBinder() {

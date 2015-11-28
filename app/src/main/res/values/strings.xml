@@ -14,7 +14,8 @@
     <string name="set_time">Set the event time (optional)</string>
     <string name="no_title_set">No title set</string>
 
-    <string name="days_remaining">days remaining</string>
+    <string name="days_remaining">days</string>
+    <string name="day_remaining">day</string>
 
     <!--Category related strings-->
     <string name="academic">Academic</string>

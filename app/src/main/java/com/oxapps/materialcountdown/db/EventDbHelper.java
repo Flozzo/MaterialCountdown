@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.oxapps.materialcountdown.Event;
+import com.oxapps.materialcountdown.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     public static final String KEY_DESC = "description";
     public static final String KEY_CATEGORY = "category";
     public static final String KEY_END = "end";
+    public static final String DAY = "day";
     private Context context;
 
     public EventDbHelper(Context ctx) {
@@ -87,12 +89,19 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
             map.put(KEY_CATEGORY, cursor.getString(3));
             long end = cursor.getLong(4);
-            map.put(KEY_END, getRemainingTime(end));
+            String remaining = getRemainingTime(end);
+            map.put(DAY, getDayString(remaining));
+            map.put(KEY_END, remaining);
             events.add(map);
         }
         cursor.close();
         db.close();
         return events;
+    }
+
+    private String getDayString(String remaining) {
+        int dayRes = remaining.equals("1") ? R.string.day_remaining : R.string.days_remaining;
+        return context.getString(dayRes);
     }
 
     private String getRemainingTime(long end) {
