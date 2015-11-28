@@ -12,6 +12,9 @@
     <string name="set_date">Set the event date</string>
     <string name="time">Time</string>
     <string name="set_time">Set the event time (optional)</string>
+    <string name="no_title_set">No title set</string>
+
+    <string name="days_remaining">days remaining</string>
 
     <!--Category related strings-->
     <string name="academic">Academic</string>

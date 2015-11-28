@@ -1,5 +1,5 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="72dp"
@@ -11,7 +11,7 @@
         style="@style/MaterialListIcon"
         android:layout_marginTop="16dp"
         android:background="@drawable/circle_drawable"
-        android:src="@drawable/ic_new_event"/>
+        tools:src="@drawable/ic_new_event"/>
 
     <TextView
         android:id="@+id/event_name"
@@ -19,21 +19,47 @@
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:layout_marginLeft="72dp"
-        android:text="Event Name"
+        tools:text="Event Name"
         android:textSize="16sp"
         android:textColor="@color/text_primary"/>
 
     <TextView
-        android:id="@+id/course_time"
+        android:id="@+id/event_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="72dp"
         android:paddingBottom="16dp"
+        android:layout_alignLeft="@+id/event_name"
+        android:maxLines="1"
         android:layout_alignParentBottom="true"
-        android:text="01 January 1970"
+        tools:text="Description goes here yes very good"
+        android:layout_toLeftOf="@+id/event_days_remaining"
         android:textSize="14sp"
         android:textColor="@color/text_secondary"/>
 
+    <TextView
+        android:id="@+id/event_days"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="22"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="16dp"
+        android:layout_alignLeft="@+id/event_days_remaining"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="@color/text_primary"/>
+
+    <TextView
+        android:id="@+id/event_days_remaining"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/days_remaining"
+        android:layout_marginLeft="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:textSize="14sp"
+        android:textColor="@color/text_secondary"/>
 
 
 </RelativeLayout>
