@@ -6,11 +6,13 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp">
 
-    <ImageView
+    <com.oxapps.materialcountdown.CircularIconImageView
         android:id="@+id/iv_event_logo"
-        style="@style/MaterialListIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="8dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/circle_drawable"
+        tools:background="@color/material_red_500"
         tools:src="@drawable/ic_new_event"/>
 
     <TextView
