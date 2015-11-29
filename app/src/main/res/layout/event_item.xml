@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="72dp"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:paddingRight="16dp"
+    android:background="@color/material_grey_50">
 
     <com.oxapps.materialcountdown.CircularIconImageView
         android:id="@+id/iv_event_logo"
@@ -12,6 +13,7 @@
         android:layout_height="40dp"
         android:padding="8dp"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         tools:background="@color/material_red_500"
         tools:src="@drawable/ic_new_event"/>
 
@@ -41,7 +43,7 @@
     <RelativeLayout
         android:id="@+id/rl_event_days"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="72dp"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="16dp">
 
@@ -62,8 +64,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="16dp"
             tools:text="@string/days_remaining"
+            android:paddingBottom="16dp"
             android:layout_alignParentBottom="true"
             android:textSize="14sp"
             android:textColor="@color/text_secondary" />

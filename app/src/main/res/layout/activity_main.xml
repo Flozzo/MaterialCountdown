@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/coordinator_main"
     android:fitsSystemWindows="true"
     tools:context="com.oxapps.materialcountdown.MainActivity">
 
@@ -21,7 +22,14 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <ListView
+        android:id="@+id/main_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/event_item">
+
+    </ListView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
