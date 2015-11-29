@@ -14,6 +14,9 @@
     <string name="set_time">Set the event time (optional)</string>
     <string name="no_title_set">No title set</string>
 
+    <string name="item_removed">Item removed</string>
+    <string name="undo">Undo</string>
+
     <string name="days_remaining">days</string>
     <string name="day_remaining">day</string>
 

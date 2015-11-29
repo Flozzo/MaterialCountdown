@@ -133,6 +133,17 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
     }
 
+    public boolean removeEvent(String id) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            int result = db.delete(TABLE_NAME, KEY_ID + " = ?", new String[]{id});
+            return result == 1;
+        } finally {
+            db.close();
+        }
+
+    }
+
     public int size() {
         SQLiteDatabase db = getReadableDatabase();
         return (int) DatabaseUtils.queryNumEntries(db, TABLE_NAME);

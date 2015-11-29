@@ -1,10 +1,9 @@
 package com.oxapps.materialcountdown;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +15,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.oxapps.materialcountdown.db.EventDbHelper;
+import com.wdullaer.swipeactionadapter.SwipeActionAdapter;
+import com.wdullaer.swipeactionadapter.SwipeDirection;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -24,9 +25,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeActionAdapter.SwipeActionListener {
     @Bind(R.id.main_list)
     ListView mListView;
+    SwipeActionAdapter mAdapter;
+    private static final String TAG = "MainActivity";
+    private ArrayList<Map<String, String>> mEventsList;
 
 
     @Override
@@ -68,6 +72,41 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    @Override
+    public boolean hasActions(int position, SwipeDirection direction) {
+        return direction.isLeft() || direction.isRight();
+    }
+
+    @Override
+    public boolean shouldDismiss(int position, SwipeDirection direction) {
+        return direction.isLeft() || direction.isRight();
+    }
+
+    @Override
+    public void onSwipe(final int[] position, SwipeDirection[] direction) {
+        final Map<String, String> data = (Map<String, String>) mAdapter.getItem(position[0]);
+        mEventsList.remove(position[0]);
+        mAdapter.notifyDataSetChanged();
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.coordinator_main), R.string.item_removed, Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.undo, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEventsList.add(position[0], data);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+        snackbar.setCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                super.onDismissed(snackbar, event);
+                if (event != DISMISS_EVENT_ACTION) {
+                    new EventDbHelper(MainActivity.this).removeEvent(data.get(EventDbHelper.KEY_ID));
+                }
+            }
+        });
+        snackbar.show();
+    }
+
     class PopulateListTask extends AsyncTask<Void, Void, ArrayList<Map<String, String>>> {
 
         @Override
@@ -80,10 +119,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Map<String, String>> events) {
             super.onPostExecute(events);
+            MainActivity.this.mEventsList = events;
             String[] from = new String[]{EventDbHelper.KEY_NAME, EventDbHelper.KEY_DESC, EventDbHelper.KEY_END, EventDbHelper.KEY_CATEGORY, EventDbHelper.DAY};
             int[] to = new int[]{R.id.event_name, R.id.event_desc, R.id.event_days, R.id.iv_event_logo, R.id.event_days_remaining};
             SimpleAdapter adapter = new SimpleAdapter(MainActivity.this, events, R.layout.event_item, from, to);
             final Category[] categories = Category.values();
+
             adapter.setViewBinder(new SimpleAdapter.ViewBinder() {
                 @Override
                 public boolean setViewValue(View view, Object data, String textRepresentation) {
@@ -97,14 +138,14 @@ public class MainActivity extends AppCompatActivity {
                         return false;
                 }
             });
-            mListView.setAdapter(adapter);
-        }
 
-        private Drawable colourCircleDrawable(int color) {
-            GradientDrawable d = (GradientDrawable) getDrawable(R.drawable.circle_drawable);
-            //noinspection ConstantConditions
-            d.setColor(ContextCompat.getColor(MainActivity.this, color));
-            return d;
+            mAdapter = new SwipeActionAdapter(adapter);
+            mAdapter.setListView(mListView);
+            mAdapter.setFixedBackgrounds(true);
+            mListView.setAdapter(mAdapter);
+            mAdapter.setSwipeActionListener(MainActivity.this);
+            mAdapter.addBackground(SwipeDirection.DIRECTION_NORMAL_LEFT, R.layout.swipe_bg_main_left)
+                    .addBackground(SwipeDirection.DIRECTION_NORMAL_RIGHT, R.layout.swipe_bg_main_right);
         }
     }
 }
