@@ -1,11 +1,7 @@
 package com.oxapps.materialcountdown;
 
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
@@ -15,10 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.oxapps.materialcountdown.db.EventDbHelper;
@@ -26,12 +19,8 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -130,6 +119,7 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
                 Event event = new Event(name, description, mCalendar.getTimeInMillis(), mCategory.ordinal());
                 EventDbHelper helper = new EventDbHelper(NewEventActivity.this);
                 helper.addEvent(event);
+                onBackPressed();
             }
             return true;
         }
