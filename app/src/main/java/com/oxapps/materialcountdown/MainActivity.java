@@ -31,7 +31,17 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
     SwipeActionAdapter mAdapter;
     private static final String TAG = "MainActivity";
     private ArrayList<Map<String, String>> mEventsList;
+    PopulateListTask listTask;
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (listTask == null || !listTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
+            listTask = new PopulateListTask();
+            listTask.execute();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +50,6 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
         Toolbar toolbar = ButterKnife.findById(MainActivity.this, R.id.toolbar_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        PopulateListTask task = new PopulateListTask();
-        task.execute();
     }
 
     @Override
