@@ -1,7 +1,10 @@
 package com.oxapps.materialcountdown;
 
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
@@ -34,6 +37,8 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
     @Bind(R.id.tv_set_category) TextView mSetCategoryView;
     @Bind(R.id.tv_set_date) TextView mSetDateView;
     @Bind(R.id.tv_set_time) TextView mSetTimeView;
+    @Bind(R.id.toolbar_new_event)
+    Toolbar mToolbar;
 
 
     private Category mCategory;
@@ -43,9 +48,8 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
-        Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar_new_event);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initTime();
     }
@@ -73,12 +77,22 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mCategory = Category.values()[position];
                 //TODO: Set Toolbar colour to category colour and animate this
+                int color = ContextCompat.getColor(NewEventActivity.this, mCategory.getColor());
+                int sbColor = ContextCompat.getColor(NewEventActivity.this, mCategory.getStatusBarColor());
+                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
+                setStatusBarColor(sbColor);
                 dialog.hide();
                 ((TextView) mCategoryView.findViewById(R.id.tv_set_category)).setText(mCategory.getName());
             }
         });
 
         dialog.show();
+    }
+
+    private void setStatusBarColor(int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(color);
+        }
     }
 
     @OnClick(R.id.new_event_date)
