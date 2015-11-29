@@ -12,7 +12,11 @@
     <string name="set_date">Set the event date</string>
     <string name="time">Time</string>
     <string name="set_time">Set the event time (optional)</string>
-    <string name="no_title_set">No title set</string>
+    <string name="no_title_set">Please enter a title</string>
+    <string name="no_date_set">Please set a date</string>
+    <string name="no_category_set">Please select a category</string>
+    <string name="no_description">No description</string>
+
 
     <string name="item_removed">Item removed</string>
     <string name="undo">Undo</string>

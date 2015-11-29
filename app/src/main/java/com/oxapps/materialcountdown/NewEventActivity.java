@@ -1,6 +1,7 @@
 package com.oxapps.materialcountdown;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
@@ -107,20 +108,23 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_save) {
-            if (!mCalendar.after(Calendar.getInstance())) {
-                //TODO: No date set
+            int errorRes;
+            if (isEmpty(mTitleView)) {
+                errorRes = R.string.no_title_set;
+            } else if (!mCalendar.after(Calendar.getInstance())) {
+                errorRes = R.string.no_date_set;
             } else if(mCategory == null) {
-                //TODO: No category set
-            } else if(isEmpty(mTitleView)) {
-                mTitleView.setError(getString(R.string.no_title_set));
+                errorRes = R.string.no_category_set;
             } else {
                 String name = mTitleView.getText().toString().trim();
-                String description = mDescriptionView.getText().toString().trim();
+                String description = isEmpty(mDescriptionView) ? getString(R.string.no_description) : mDescriptionView.getText().toString().trim();
                 Event event = new Event(name, description, mCalendar.getTimeInMillis(), mCategory.ordinal());
                 EventDbHelper helper = new EventDbHelper(NewEventActivity.this);
                 helper.addEvent(event);
                 onBackPressed();
+                return true;
             }
+            Snackbar.make(findViewById(R.id.coordinator_new_event), errorRes, Snackbar.LENGTH_LONG).show();
             return true;
         }
 
