@@ -7,9 +7,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -25,7 +27,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements SwipeActionAdapter.SwipeActionListener {
+public class MainActivity extends AppCompatActivity implements SwipeActionAdapter.SwipeActionListener, AdapterView.OnItemClickListener {
     @Bind(R.id.main_list)
     ListView mListView;
     SwipeActionAdapter mAdapter;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
         Toolbar toolbar = ButterKnife.findById(MainActivity.this, R.id.toolbar_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        mListView.setOnItemClickListener(MainActivity.this);
     }
 
     @Override
@@ -113,6 +116,24 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
             }
         });
         snackbar.show();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent i = new Intent(MainActivity.this, EventDetailActivity.class);
+        Map<String, String> map = mEventsList.get(position);
+        int eventId = Integer.parseInt(map.get(EventDbHelper.KEY_ID));
+        int category = Integer.parseInt(map.get(EventDbHelper.KEY_CATEGORY));
+        String title = map.get(EventDbHelper.KEY_NAME);
+        String desc = map.get(EventDbHelper.KEY_DESC);
+        String days = map.get(EventDbHelper.DAY);
+        i.putExtra(EventDbHelper.KEY_CATEGORY, category);
+        i.putExtra("eventId", eventId);
+        Log.d(TAG, "onItemClick: " + eventId);
+        i.putExtra(EventDbHelper.KEY_NAME, title);
+        i.putExtra(EventDbHelper.KEY_DESC, desc);
+        i.putExtra(EventDbHelper.DAY, days);
+        startActivity(i);
     }
 
     class PopulateListTask extends AsyncTask<Void, Void, ArrayList<Map<String, String>>> {

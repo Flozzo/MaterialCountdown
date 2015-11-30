@@ -35,7 +35,15 @@
     <string name="sport">Sport</string>
     <string name="travel">Travel</string>
     <string name="work">Work</string>
+
     <string name="title_activity_new_event">New Event</string>
     <string name="show_notifications">Show Notifications</string>
+    <string name="title_activity_event_detail">EventDetailActivity</string>
+
+    <string name="hour_short">h</string>
+    <string name="minute_short">m</string>
+    <string name="second_short">s</string>
+    <string name="transition_title">title transition</string>
+    <string name="transition_desc">desc transition</string>
 
 </resources>

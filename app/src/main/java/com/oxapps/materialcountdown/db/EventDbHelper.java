@@ -112,10 +112,22 @@ public class EventDbHelper extends SQLiteOpenHelper {
         return dateText;
     }
 
+    public long getEndTime(int id) {
+        SQLiteDatabase db = getReadableDatabase();
+        String[] columns = new String[]{KEY_END};
+        String selection = KEY_ID + " = ?";
+        Cursor cursor = db.query(TABLE_NAME, columns, selection, new String[]{String.valueOf(id)}, null, null, null);
+        cursor.moveToFirst();
+        long time = cursor.getLong(0);
+        cursor.close();
+        db.close();
+        return time;
+    }
+
     public Event getEvent(int id) {
         SQLiteDatabase db = getReadableDatabase();
-        String selection = KEY_ID + " = " + id;
-        Cursor cursor = db.query(TABLE_NAME, null, selection, null, null, null, null);
+        String selection = KEY_ID + " = ?";
+        Cursor cursor = db.query(TABLE_NAME, null, selection, new String[]{String.valueOf(id)}, null, null, null);
         Event event = new Event(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getLong(3), cursor.getInt(4));
         cursor.close();
         db.close();

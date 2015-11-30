@@ -4,6 +4,7 @@ package com.oxapps.materialcountdown;
  * Created by flynn on 21/11/15.
  */
 public class Event {
+    protected static final String CATEGORY = "category";
     private int id;
     private String name;
     private String description;
