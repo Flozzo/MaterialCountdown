@@ -89,9 +89,9 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
             map.put(KEY_CATEGORY, cursor.getString(3));
             long end = cursor.getLong(4);
-            String remaining = getRemainingTime(end);
-            map.put(DAY, getDayString(remaining));
-            map.put(KEY_END, remaining);
+            String[] time = getDayString(end);
+            map.put(DAY, time[1]);
+            map.put(KEY_END, time[0]);
             events.add(map);
         }
         cursor.close();
@@ -102,6 +102,37 @@ public class EventDbHelper extends SQLiteOpenHelper {
     private String getDayString(String remaining) {
         int dayRes = remaining.equals("1") ? R.string.day_remaining : R.string.days_remaining;
         return context.getString(dayRes);
+    }
+
+    private String[] getDayString(long end) {
+        long remaining = end - System.currentTimeMillis();
+        int timeUnit;
+        long timeValue;
+
+        long dayMillis = TimeUnit.DAYS.toMillis(1);
+        long hourMillis = dayMillis / 24;
+        long minuteMillis = hourMillis / 60;
+
+        if (remaining > 2 * dayMillis) {
+            timeValue = TimeUnit.MILLISECONDS.toDays(remaining);
+            timeUnit = R.string.days_remaining;
+        } else if (remaining > dayMillis) {
+            timeValue = 1;
+            timeUnit = R.string.day_remaining;
+        } else if (remaining > 2 * hourMillis) {
+            timeValue = TimeUnit.MILLISECONDS.toHours(remaining);
+            timeUnit = R.string.hours_remaining;
+        } else if (remaining > hourMillis) {
+            timeValue = 1;
+            timeUnit = R.string.hour_remaining;
+        } else if (remaining > 2 * minuteMillis) {
+            timeValue = TimeUnit.MILLISECONDS.toMinutes(remaining);
+            timeUnit = R.string.minutes_remaining;
+        } else {
+            timeValue = 1;
+            timeUnit = R.string.minute_remaining;
+        }
+        return new String[]{String.valueOf(timeValue), context.getString(timeUnit)};
     }
 
     private String getRemainingTime(long end) {
