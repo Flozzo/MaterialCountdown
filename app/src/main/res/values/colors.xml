@@ -28,6 +28,7 @@
     <color name="material_orange_700">#F57C00</color>
     <color name="material_brown_700">#5D4037</color>
 
-    <color name="material_grey_50">#FAFAFA</color>
-
+    <color name="material_grey_background_50">#FAFAFA</color>
+    <color name="material_grey_background_100">#F5F5F5</color>
+    <color name="material_grey_background_200">#EEEEEE</color>
 </resources>
