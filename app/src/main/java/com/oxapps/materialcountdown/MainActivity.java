@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 
 import com.oxapps.materialcountdown.db.EventDbHelper;
@@ -28,22 +29,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements SwipeActionAdapter.SwipeActionListener, AdapterView.OnItemClickListener {
-    @Bind(R.id.main_list)
-    ListView mListView;
+    @Bind(R.id.main_list) ListView mListView;
+    @Bind(R.id.main_empty_view) RelativeLayout mEmptyStateView;
     SwipeActionAdapter mAdapter;
     private static final String TAG = "MainActivity";
     private ArrayList<Map<String, String>> mEventsList;
     PopulateListTask listTask;
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (listTask == null || !listTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
-            listTask = new PopulateListTask();
-            listTask.execute();
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +45,15 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         mListView.setOnItemClickListener(MainActivity.this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (listTask == null || !listTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
+            listTask = new PopulateListTask();
+            listTask.execute();
+        }
     }
 
     @Override
@@ -77,8 +78,8 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R.id.fab)
-    public void onFloatingActionClicked(View v) {
+    @OnClick({R.id.fab, R.id.main_empty_view})
+    public void createNewEvent(View v) {
         Intent i = new Intent(this, NewEventActivity.class);
         startActivity(i);
     }
@@ -97,6 +98,9 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
     public void onSwipe(final int[] position, SwipeDirection[] direction) {
         final Map<String, String> data = (Map<String, String>) mAdapter.getItem(position[0]);
         mEventsList.remove(position[0]);
+        if (mEventsList.isEmpty()) {
+            showEmptyMessage();
+        }
         mAdapter.notifyDataSetChanged();
         Snackbar snackbar = Snackbar.make(findViewById(R.id.coordinator_main), R.string.item_removed, Snackbar.LENGTH_LONG);
         snackbar.setAction(R.string.undo, new View.OnClickListener() {
@@ -104,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
             public void onClick(View v) {
                 mEventsList.add(position[0], data);
                 mAdapter.notifyDataSetChanged();
+                hideEmptyMessage();
             }
         });
         snackbar.setCallback(new Snackbar.Callback() {
@@ -113,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
                 if (event != DISMISS_EVENT_ACTION) {
                     new EventDbHelper(MainActivity.this).removeEvent(data.get(EventDbHelper.KEY_ID));
                 }
+
             }
         });
         snackbar.show();
@@ -148,6 +154,11 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
         @Override
         protected void onPostExecute(ArrayList<Map<String, String>> events) {
             super.onPostExecute(events);
+            if (events.isEmpty()) {
+                showEmptyMessage();
+                return;
+            }
+            hideEmptyMessage();
             MainActivity.this.mEventsList = events;
             String[] from = new String[]{EventDbHelper.KEY_NAME, EventDbHelper.KEY_DESC, EventDbHelper.KEY_END, EventDbHelper.KEY_CATEGORY, EventDbHelper.DAY};
             int[] to = new int[]{R.id.event_name, R.id.event_desc, R.id.event_days, R.id.iv_event_logo, R.id.event_days_remaining};
@@ -176,5 +187,15 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
             mAdapter.addBackground(SwipeDirection.DIRECTION_NORMAL_LEFT, R.layout.swipe_bg_main_left)
                     .addBackground(SwipeDirection.DIRECTION_NORMAL_RIGHT, R.layout.swipe_bg_main_right);
         }
+    }
+
+    private void hideEmptyMessage() {
+        mListView.setVisibility(View.VISIBLE);
+        mEmptyStateView.setVisibility(View.GONE);
+    }
+
+    private void showEmptyMessage() {
+        mListView.setVisibility(View.GONE);
+        mEmptyStateView.setVisibility(View.VISIBLE);
     }
 }
