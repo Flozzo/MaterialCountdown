@@ -82,7 +82,7 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
                 getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
                 setStatusBarColor(sbColor);
                 dialog.hide();
-                ((TextView) mCategoryView.findViewById(R.id.tv_set_category)).setText(mCategory.getName());
+                mSetCategoryView.setText(mCategory.getName());
             }
         });
 
