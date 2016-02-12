@@ -7,6 +7,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.oxapps.materialcountdown.Category;
 import com.oxapps.materialcountdown.Event;
 import com.oxapps.materialcountdown.R;
 
@@ -55,7 +56,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
         values.put(KEY_NAME, event.getName());
         values.put(KEY_DESC, event.getDescription());
         values.put(KEY_END, event.getEndTime());
-        values.put(KEY_CATEGORY, event.getCategory());
+        values.put(KEY_CATEGORY, event.getCategory().ordinal());
         boolean success = (db.insert(TABLE_NAME, null, values) != -1L);
         db.close();
         return(success);
@@ -67,8 +68,10 @@ public class EventDbHelper extends SQLiteOpenHelper {
         String selection = KEY_END + " >= " + System.currentTimeMillis();
         Cursor cursor = db.query(TABLE_NAME,null , selection, null, null, null, KEY_END + " ASC");
         ArrayList<Event> events = new ArrayList<>();
+        Category[] categories = Category.values();
         while(cursor.moveToNext()) {
-            events.add(new Event(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getLong(4), cursor.getInt(3)));
+            Category category = categories[cursor.getInt(3)];
+            events.add(new Event(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getLong(4), category));
         }
         cursor.close();
         db.close();
@@ -159,21 +162,12 @@ public class EventDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         String selection = KEY_ID + " = ?";
         Cursor cursor = db.query(TABLE_NAME, null, selection, new String[]{String.valueOf(id)}, null, null, null);
-        Event event = new Event(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getLong(3), cursor.getInt(4));
+        Category[] categories = Category.values();
+        Category category = categories[cursor.getInt(3)];
+        Event event = new Event(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getLong(4), category);
         cursor.close();
         db.close();
         return event;
-    }
-
-    public boolean removeEvent(int id) {
-        SQLiteDatabase db = getWritableDatabase();
-        try {
-            int result = db.delete(TABLE_NAME, KEY_ID + " = ?", new String[]{String.valueOf(id)});
-            return result == 1;
-        } finally {
-            db.close();
-        }
-
     }
 
     public boolean removeEvent(String id) {

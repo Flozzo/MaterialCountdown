@@ -132,7 +132,7 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
             } else {
                 String name = mTitleView.getText().toString().trim();
                 String description = isEmpty(mDescriptionView) ? getString(R.string.no_description) : mDescriptionView.getText().toString().trim();
-                Event event = new Event(name, description, mCalendar.getTimeInMillis(), mCategory.ordinal());
+                Event event = new Event(name, description, mCalendar.getTimeInMillis(), mCategory);
                 EventDbHelper helper = new EventDbHelper(NewEventActivity.this);
                 helper.addEvent(event);
                 onBackPressed();
