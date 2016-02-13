@@ -170,10 +170,10 @@ public class EventDbHelper extends SQLiteOpenHelper {
         return event;
     }
 
-    public boolean removeEvent(String id) {
+    public boolean removeEvent(int id) {
         SQLiteDatabase db = getWritableDatabase();
         try {
-            int result = db.delete(TABLE_NAME, KEY_ID + " = ?", new String[]{id});
+            int result = db.delete(TABLE_NAME, KEY_ID + " = ?", new String[]{String.valueOf(id)});
             return result == 1;
         } finally {
             db.close();

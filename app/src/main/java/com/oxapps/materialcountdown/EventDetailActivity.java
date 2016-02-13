@@ -14,8 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.oxapps.materialcountdown.db.EventDbHelper;
-
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
@@ -86,18 +84,17 @@ public class EventDetailActivity extends AppCompatActivity {
 
     private void initViews() {
         Intent source = getIntent();
-        int cat = source.getIntExtra(EventDbHelper.KEY_CATEGORY, -1);
-        Category category = Category.values()[cat];
+        Event event = source.getParcelableExtra("event");
+        Category category = event.getCategory();
         int color = ContextCompat.getColor(EventDetailActivity.this, category.getColor());
         int darkColor = ContextCompat.getColor(EventDetailActivity.this, category.getStatusBarColor());
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
         setStatusBarColor(darkColor);
-        mTitleView.setText(source.getStringExtra(EventDbHelper.KEY_NAME));
-        mDescView.setText(source.getStringExtra(EventDbHelper.KEY_DESC));
-        mDaysView.setText(source.getStringExtra(EventDbHelper.DAY));
-        int id = source.getIntExtra("eventId", -1);
+        mTitleView.setText(event.getName());
+        mDescView.setText(event.getDescription());
+        int id = event.getId();
         Log.d(TAG, "initViews: " + id);
-        endTime = new EventDbHelper(EventDetailActivity.this).getEndTime(id);
+        endTime = event.getEndTime();
         setTimeTexts();
     }
 

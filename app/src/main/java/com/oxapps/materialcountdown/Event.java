@@ -34,6 +34,10 @@ public class Event implements Parcelable {
         return endTime;
     }
 
+    public long getRemainingTime() {
+        return endTime - System.currentTimeMillis();
+    }
+
     public Category getCategory() {
         return category;
     }
@@ -45,8 +49,7 @@ public class Event implements Parcelable {
         name = in.readString();
         description = in.readString();
         endTime = in.readLong();
-        category = (Category) in.readSerializable();
-        //category = (Category) in.readValue(Category.class.getClassLoader());
+        category = (Category) in.readValue(Category.class.getClassLoader());
     }
 
     @Override
@@ -75,4 +78,8 @@ public class Event implements Parcelable {
             return new Event[size];
         }
     };
+
+    public int getId() {
+        return id;
+    }
 }
