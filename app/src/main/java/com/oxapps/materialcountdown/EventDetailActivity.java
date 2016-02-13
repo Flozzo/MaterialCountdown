@@ -5,8 +5,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class EventDetailActivity extends AppCompatActivity {
     @Bind(R.id.tv_event_detail_title)
@@ -33,10 +32,11 @@ public class EventDetailActivity extends AppCompatActivity {
     @Bind(R.id.event_detail_seconds)
     TextView mSecondsView;
 
-    private long endTime;
     private boolean daysEnabled = true;
     private static final String TAG = "EventDetailActivity";
     CountDownTimer timer;
+    public final static String ACTION_EDIT = "edit";
+    private Event mEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,25 +45,15 @@ public class EventDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_event_detail);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_event_detail_edit);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mEvent = getIntent().getParcelableExtra("event");
         initViews();
-
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        timer = new CountDownTimer(endTime - System.currentTimeMillis(), 1000) {
+        timer = new CountDownTimer(mEvent.getRemainingTime(), 1000) {
 
             public void onTick(long millisUntilFinished) {
                 setTimeTexts();
@@ -83,23 +73,36 @@ public class EventDetailActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        Intent source = getIntent();
-        Event event = source.getParcelableExtra("event");
-        Category category = event.getCategory();
+        Category category = mEvent.getCategory();
         int color = ContextCompat.getColor(EventDetailActivity.this, category.getColor());
         int darkColor = ContextCompat.getColor(EventDetailActivity.this, category.getStatusBarColor());
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
         setStatusBarColor(darkColor);
-        mTitleView.setText(event.getName());
-        mDescView.setText(event.getDescription());
-        int id = event.getId();
+        mTitleView.setText(mEvent.getName());
+        mDescView.setText(mEvent.getDescription());
+        int id = mEvent.getId();
         Log.d(TAG, "initViews: " + id);
-        endTime = event.getEndTime();
         setTimeTexts();
     }
 
+    @OnClick(R.id.fab_event_detail_edit)
+    public void editEvent() {
+        Intent intent = new Intent(this, NewEventActivity.class);
+        intent.setAction(ACTION_EDIT);
+        intent.putExtra("event", mEvent);
+        startActivityForResult(intent, 123);
+    }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            mEvent = data.getParcelableExtra("event");
+            initViews();
+        }
+    }
+
     private void setTimeTexts() {
-        long remaining = endTime - System.currentTimeMillis();
+        long remaining = mEvent.getRemainingTime();
         long days = TimeUnit.MILLISECONDS.toDays(remaining);
         remaining = remaining - TimeUnit.DAYS.toMillis(days);
         long hours = TimeUnit.MILLISECONDS.toHours(remaining);

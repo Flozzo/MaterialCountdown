@@ -1,5 +1,7 @@
 package com.oxapps.materialcountdown;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.oxapps.materialcountdown.db.EventDbHelper;
@@ -33,12 +34,12 @@ import butterknife.OnClick;
 public class NewEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     @Bind(R.id.tv_new_event_title) EditText mTitleView;
     @Bind(R.id.tv_new_event_desc) EditText mDescriptionView;
-    @Bind(R.id.new_event_category) RelativeLayout mCategoryView;
     @Bind(R.id.tv_set_category) TextView mSetCategoryView;
     @Bind(R.id.tv_set_date) TextView mSetDateView;
     @Bind(R.id.tv_set_time) TextView mSetTimeView;
     @Bind(R.id.toolbar_new_event)
     Toolbar mToolbar;
+    int editId;
 
 
     private Category mCategory;
@@ -51,8 +52,26 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        initTime();
+        if (getIntent().getAction().equals(EventDetailActivity.ACTION_EDIT)) {
+            initForEdit();
+        } else {
+            initTime();
+        }
     }
+
+    private void initForEdit() {
+        Event event = getIntent().getParcelableExtra("event");
+        mCalendar = new GregorianCalendar();
+        mCalendar.setTimeInMillis(event.getEndTime());
+        mTitleView.setText(event.getName());
+        mDescriptionView.setText(event.getDescription());
+        mCategory = event.getCategory();
+        setDateText();
+        setTimeText();
+        onCategorySet();
+        editId = event.getId();
+    }
+
 
     private void initTime() {
         mCalendar = new GregorianCalendar();
@@ -76,17 +95,21 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mCategory = Category.values()[position];
-                //TODO: Set Toolbar colour to category colour and animate this
-                int color = ContextCompat.getColor(NewEventActivity.this, mCategory.getColor());
-                int sbColor = ContextCompat.getColor(NewEventActivity.this, mCategory.getStatusBarColor());
-                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
-                setStatusBarColor(sbColor);
+                onCategorySet();
                 dialog.hide();
-                mSetCategoryView.setText(mCategory.getName());
             }
         });
 
         dialog.show();
+    }
+
+    private void onCategorySet() {
+        //TODO: Set Toolbar colour to category colour and animate this
+        int color = ContextCompat.getColor(NewEventActivity.this, mCategory.getColor());
+        int sbColor = ContextCompat.getColor(NewEventActivity.this, mCategory.getStatusBarColor());
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
+        setStatusBarColor(sbColor);
+        mSetCategoryView.setText(mCategory.getName());
     }
 
     private void setStatusBarColor(int color) {
@@ -134,6 +157,15 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
                 String description = isEmpty(mDescriptionView) ? getString(R.string.no_description) : mDescriptionView.getText().toString().trim();
                 Event event = new Event(name, description, mCalendar.getTimeInMillis(), mCategory);
                 EventDbHelper helper = new EventDbHelper(NewEventActivity.this);
+                if (editId != -1) {
+                    event.setId(editId);
+                    helper.editEvent(event);
+                    Intent i = getIntent();
+                    i.putExtra("event", event);
+                    setResult(Activity.RESULT_OK, i);
+                    finish();
+                    return true;
+                }
                 helper.addEvent(event);
                 onBackPressed();
                 return true;
@@ -152,18 +184,27 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         mCalendar.set(year, monthOfYear, dayOfMonth);
+        setDateText();
 
-        String dateText = DateUtils.formatDateTime(NewEventActivity.this, mCalendar.getTimeInMillis(), DateUtils.FORMAT_SHOW_YEAR);
-        mSetDateView.setText(dateText);
-        Log.v("Set date", String.valueOf(mCalendar.getTimeInMillis()));
     }
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
         mCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         mCalendar.set(Calendar.MINUTE, minute);
+        setTimeText();
+    }
+
+    private void setDateText() {
+        String dateText = DateUtils.formatDateTime(NewEventActivity.this, mCalendar.getTimeInMillis(), DateUtils.FORMAT_SHOW_YEAR);
+        mSetDateView.setText(dateText);
+        Log.v("Set date", String.valueOf(mCalendar.getTimeInMillis()));
+    }
+
+    private void setTimeText() {
         String timeText = DateUtils.formatDateTime(NewEventActivity.this, mCalendar.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME);
         mSetTimeView.setText(timeText);
         Log.v("Set time", String.valueOf(mCalendar.getTimeInMillis()));
+
     }
 }

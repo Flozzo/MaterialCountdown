@@ -62,6 +62,17 @@ public class EventDbHelper extends SQLiteOpenHelper {
         return(success);
     }
 
+    public void editEvent(Event event) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, event.getName());
+        values.put(KEY_DESC, event.getDescription());
+        values.put(KEY_END, event.getEndTime());
+        values.put(KEY_CATEGORY, event.getCategory().ordinal());
+        db.update(TABLE_NAME, values, KEY_ID + "=?", new String[]{String.valueOf(event.getId())});
+        db.close();
+    }
+
     public ArrayList<Event> getEvents() {
         SQLiteDatabase db = getReadableDatabase();
         //String[] columns = new String[]{KEY_NAME, KEY_DESC, KEY_END, KEY_CATEGORY};
