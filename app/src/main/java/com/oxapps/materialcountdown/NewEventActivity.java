@@ -39,7 +39,7 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
     @Bind(R.id.tv_set_time) TextView mSetTimeView;
     @Bind(R.id.toolbar_new_event)
     Toolbar mToolbar;
-    int editId;
+    int editId = -1;
 
 
     private Category mCategory;
@@ -52,7 +52,7 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if (getIntent().getAction().equals(EventDetailActivity.ACTION_EDIT)) {
+        if (getIntent().getAction() != null && getIntent().getAction().equals(EventDetailActivity.ACTION_EDIT)) {
             initForEdit();
         } else {
             initTime();
@@ -120,20 +120,17 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
 
     @OnClick(R.id.new_event_date)
     public void setDate() {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_YEAR, 1);
-        DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(NewEventActivity.this, cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH));
-        datePickerDialog.setMinDate(cal);
+        DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(NewEventActivity.this, mCalendar.get(Calendar.YEAR),
+                mCalendar.get(Calendar.MONTH),
+                mCalendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.setMinDate(Calendar.getInstance());
         datePickerDialog.show(getFragmentManager(), "Date picker");
     }
 
     @OnClick(R.id.new_event_time)
     public void setTime() {
-        Calendar cal = Calendar.getInstance();
         boolean is24HourMode = DateFormat.is24HourFormat(NewEventActivity.this);
-        TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(NewEventActivity.this, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), is24HourMode);
+        TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(NewEventActivity.this, mCalendar.get(Calendar.HOUR_OF_DAY), mCalendar.get(Calendar.MINUTE), is24HourMode);
         timePickerDialog.show(getFragmentManager(), "Time picker");
     }
 
