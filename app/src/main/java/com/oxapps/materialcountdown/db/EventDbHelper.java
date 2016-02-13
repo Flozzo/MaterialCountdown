@@ -12,8 +12,6 @@ import com.oxapps.materialcountdown.Event;
 import com.oxapps.materialcountdown.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -87,35 +85,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return events;
-    }
-
-    public ArrayList<Map<String, String>> getEventsForMainList() {
-        SQLiteDatabase db = getReadableDatabase();
-        //String[] columns = new String[]{KEY_NAME, KEY_DESC, KEY_END, KEY_CATEGORY};
-        String selection = KEY_END + " >= " + System.currentTimeMillis();
-        Cursor cursor = db.query(TABLE_NAME, null, selection, null, null, null, KEY_END + " ASC");
-        ArrayList<Map<String, String>> events = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            Map<String, String> map = new HashMap<>();
-            map.put(KEY_ID, cursor.getString(0));
-            map.put(KEY_NAME, cursor.getString(1));
-            map.put(KEY_DESC, cursor.getString(2));
-
-            map.put(KEY_CATEGORY, cursor.getString(3));
-            long end = cursor.getLong(4);
-            String[] time = getDayString(end);
-            map.put(DAY, time[1]);
-            map.put(KEY_END, time[0]);
-            events.add(map);
-        }
-        cursor.close();
-        db.close();
-        return events;
-    }
-
-    private String getDayString(String remaining) {
-        int dayRes = remaining.equals("1") ? R.string.day_remaining : R.string.days_remaining;
-        return context.getString(dayRes);
     }
 
     private String[] getDayString(long end) {
