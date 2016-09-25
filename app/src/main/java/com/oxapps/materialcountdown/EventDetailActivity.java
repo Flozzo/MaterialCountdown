@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016 Flynn van Os
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.oxapps.materialcountdown;
 
 import android.content.Intent;
@@ -19,18 +35,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class EventDetailActivity extends AppCompatActivity {
-    @Bind(R.id.tv_event_detail_title)
-    TextView mTitleView;
-    @Bind(R.id.tv_event_detail_desc)
-    TextView mDescView;
-    @Bind(R.id.event_detail_days)
-    TextView mDaysView;
-    @Bind(R.id.event_detail_hours)
-    TextView mHoursView;
-    @Bind(R.id.event_detail_minutes)
-    TextView mMinutesView;
-    @Bind(R.id.event_detail_seconds)
-    TextView mSecondsView;
+    @Bind(R.id.tv_event_detail_title) TextView mTitleView;
+    @Bind(R.id.tv_event_detail_desc) TextView mDescView;
+    @Bind(R.id.event_detail_days) TextView mDaysView;
+    @Bind(R.id.event_detail_hours) TextView mHoursView;
+    @Bind(R.id.event_detail_minutes) TextView mMinutesView;
+    @Bind(R.id.event_detail_seconds) TextView mSecondsView;
 
     private boolean daysEnabled = true;
     private static final String TAG = "EventDetailActivity";
