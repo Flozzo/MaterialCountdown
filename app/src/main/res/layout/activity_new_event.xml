@@ -20,7 +20,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_new_event"
+    android:id="@+id/newEventCoordinatorView"
     android:fitsSystemWindows="true"
     tools:context="com.oxapps.materialcountdown.creation.EventCreationActivity">
 
@@ -30,7 +30,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_new_event"
+            android:id="@+id/newEventToolbar"
             android:layout_width="match_parent"
             android:minHeight="?android:attr/actionBarSize"
             android:layout_height="wrap_content"

@@ -37,7 +37,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/tv_new_event_title"
+            android:id="@+id/newEventTitleView"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:hint="@string/event_name"
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/tv_new_event_desc"
+            android:id="@+id/newEventDescriptionView"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:hint="@string/description"

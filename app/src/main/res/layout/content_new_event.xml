@@ -52,7 +52,7 @@
             android:textColor="@color/text_primary"/>
 
         <TextView
-            android:id="@+id/tv_set_category"
+            android:id="@+id/newEventCategoryView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="72dp"
@@ -83,7 +83,7 @@
             android:textColor="@color/text_primary"/>
 
         <TextView
-            android:id="@+id/tv_set_date"
+            android:id="@+id/newEventDateView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="72dp"
@@ -115,7 +115,7 @@
             android:textColor="@color/text_primary"/>
 
         <TextView
-            android:id="@+id/tv_set_time"
+            android:id="@+id/newEventTimeView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="72dp"
