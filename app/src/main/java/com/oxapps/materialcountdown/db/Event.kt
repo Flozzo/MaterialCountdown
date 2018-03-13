@@ -3,11 +3,11 @@ package com.oxapps.materialcountdown.db
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
-import com.oxapps.materialcountdown.Category
 import com.oxapps.materialcountdown.db.util.CATEGORY
 import com.oxapps.materialcountdown.db.util.DESC
 import com.oxapps.materialcountdown.db.util.END
 import com.oxapps.materialcountdown.db.util.NAME
+import com.oxapps.materialcountdown.model.Category
 
 @Entity(tableName = "events")
 data class Event(

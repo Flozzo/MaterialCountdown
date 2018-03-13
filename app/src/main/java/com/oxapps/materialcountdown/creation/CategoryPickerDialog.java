@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.oxapps.materialcountdown;
+package com.oxapps.materialcountdown.creation;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -26,6 +26,9 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+
+import com.oxapps.materialcountdown.R;
+import com.oxapps.materialcountdown.model.Category;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +59,7 @@ public class CategoryPickerDialog extends AppCompatDialog {
         ArrayList<Map<String, Object>> data = new ArrayList<>();
         String[] from = new String[]{"icon", "name"};
         int[] to = new int[]{R.id.iv_category_logo, R.id.category_name};
-        for(Category category : Category.values()) {
+        for (Category category : Category.values()) {
             Map<String, Object> map = new HashMap<>();
             Drawable d = getGreyDrawable(category.getIcon());
             map.put("icon", d);

@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.oxapps.materialcountdown.creation.EventCreationActivity;
 import com.oxapps.materialcountdown.db.Event;
 import com.oxapps.materialcountdown.db.EventDatabase;
 import com.wdullaer.swipeactionadapter.SwipeActionAdapter;
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
     }
 
     public void createNewEvent(View v) {
-        Intent i = new Intent(this, NewEventActivity.class);
+        Intent i = new Intent(this, EventCreationActivity.class);
         startActivity(i);
     }
 

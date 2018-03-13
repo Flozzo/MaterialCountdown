@@ -26,11 +26,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.oxapps.materialcountdown.db.Event;
+import com.oxapps.materialcountdown.model.Category;
 
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class MainAdapter extends BaseAdapter {
 
@@ -58,19 +56,18 @@ public class MainAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        @BindView(R.id.event_name)
         TextView nameView;
-        @BindView(R.id.event_desc)
         TextView descriptionView;
-        @BindView(R.id.event_days)
         TextView daysCountView;
-        @BindView(R.id.event_days_remaining)
         TextView daysTextView;
-        @BindView(R.id.iv_event_logo)
         ImageView logoView;
 
         public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
+            nameView = view.findViewById(R.id.event_name);
+            descriptionView = view.findViewById(R.id.event_desc);
+            daysCountView = view.findViewById(R.id.event_days);
+            daysTextView = view.findViewById(R.id.event_days_remaining);
+            logoView = view.findViewById(R.id.iv_event_logo);
         }
     }
 

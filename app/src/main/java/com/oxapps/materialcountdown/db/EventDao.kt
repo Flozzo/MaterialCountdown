@@ -14,7 +14,7 @@ interface EventDao {
     fun getEvents(): List<Event>
 
     @Insert(onConflict = REPLACE)
-    fun insertAll(event: Event)
+    fun insert(event: Event)
 
     @Delete
     fun delete(event: Event)

@@ -1,7 +1,7 @@
 package com.oxapps.materialcountdown.db.util
 
 import android.arch.persistence.room.TypeConverter
-import com.oxapps.materialcountdown.Category
+import com.oxapps.materialcountdown.model.Category
 
 
 class CategoryTypeConverter {

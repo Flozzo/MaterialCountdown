@@ -28,7 +28,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.oxapps.materialcountdown.creation.EventCreationActivity;
 import com.oxapps.materialcountdown.db.Event;
+import com.oxapps.materialcountdown.model.Category;
 
 import java.util.concurrent.TimeUnit;
 
@@ -105,7 +107,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab_event_detail_edit)
     public void editEvent() {
-        Intent intent = new Intent(this, NewEventActivity.class);
+        Intent intent = new Intent(this, EventCreationActivity.class);
         intent.setAction(ACTION_EDIT);
 //        intent.putExtra("event", mEvent);
         startActivityForResult(intent, 123);

@@ -17,7 +17,7 @@ abstract class EventDatabase : RoomDatabase() {
         private const val DB_NAME = "EventStorage.db"
         private var INSTANCE: EventDatabase? = null
 
-        fun getInstance(context: Context): EventDatabase? {
+        fun getInstance(context: Context): EventDatabase {
             if (INSTANCE == null) {
                 synchronized(EventDatabase::class) {
                     INSTANCE = Room.databaseBuilder(
@@ -27,7 +27,7 @@ abstract class EventDatabase : RoomDatabase() {
                         .build()
                 }
             }
-            return INSTANCE
+            return INSTANCE!!
         }
     }
 }

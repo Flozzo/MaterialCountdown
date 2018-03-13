@@ -24,7 +24,7 @@
     android:orientation="vertical"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.oxapps.materialcountdown.NewEventActivity"
+    tools:context="com.oxapps.materialcountdown.creation.EventCreationActivity"
     tools:showIn="@layout/activity_new_event">
     
     <Space

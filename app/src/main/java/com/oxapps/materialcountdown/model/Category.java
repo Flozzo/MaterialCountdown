@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.oxapps.materialcountdown;
+package com.oxapps.materialcountdown.model;
+
+import com.oxapps.materialcountdown.R;
 
 /**
  * Created by flynn on 22/11/15.

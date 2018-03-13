@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.oxapps.materialcountdown;
+package com.oxapps.materialcountdown.view;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -24,12 +24,13 @@ import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.widget.ImageView;
+
+import com.oxapps.materialcountdown.R;
 
 /**
  * Created by flynn on 28/11/15.
  */
-public class CircularIconImageView extends ImageView {
+public class CircularIconImageView extends android.support.v7.widget.AppCompatImageView {
 
     public CircularIconImageView(Context context) {
         super(context);
