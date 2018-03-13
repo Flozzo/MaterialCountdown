@@ -22,32 +22,24 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.oxapps.materialcountdown.db.EventDbHelper;
+import com.oxapps.materialcountdown.db.Event;
+import com.oxapps.materialcountdown.db.EventDatabase;
 import com.wdullaer.swipeactionadapter.SwipeActionAdapter;
 import com.wdullaer.swipeactionadapter.SwipeDirection;
 
-import java.util.ArrayList;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SwipeActionAdapter.SwipeActionListener, AdapterView.OnItemClickListener {
-    @BindView(R.id.main_list)
     ListView mListView;
-    @BindView(R.id.main_empty_view)
     RelativeLayout mEmptyStateView;
     SwipeActionAdapter mSwipeAdapter;
     MainAdapter mMainAdapter;
-    private static final String TAG = "MainActivity";
-    private ArrayList<Event> mEventsList;
+    private List<Event> mEventsList;
     PopulateListTask listTask;
 
 
@@ -55,9 +47,10 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = ButterKnife.findById(MainActivity.this, R.id.toolbar_main);
-        ButterKnife.bind(this);
+        Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
+        mListView = findViewById(R.id.main_list);
+        mEmptyStateView = findViewById(R.id.main_empty_view);
         mListView.setOnItemClickListener(MainActivity.this);
     }
 
@@ -70,29 +63,6 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @OnClick({R.id.fab, R.id.main_empty_view})
     public void createNewEvent(View v) {
         Intent i = new Intent(this, NewEventActivity.class);
         startActivity(i);
@@ -130,7 +100,8 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
             public void onDismissed(Snackbar snackbar, int swipeEvent) {
                 super.onDismissed(snackbar, swipeEvent);
                 if (swipeEvent != DISMISS_EVENT_ACTION) {
-                    new EventDbHelper(MainActivity.this).removeEvent(event.getId());
+                    EventDatabase eventDatabase = EventDatabase.Companion.getInstance(MainActivity.this);
+                    eventDatabase.eventDao().delete(event);
                 }
 
             }
@@ -138,24 +109,25 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
         snackbar.show();
     }
 
-    @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent i = new Intent(this, EventDetailActivity.class);
         Event event = mEventsList.get(position);
-        i.putExtra("event", event);
+//        i.putExtra("event", event);
         startActivity(i);
     }
 
-    class PopulateListTask extends AsyncTask<Void, Void, ArrayList<Event>> {
+    class PopulateListTask extends AsyncTask<Void, Void, List<Event>> {
 
         @Override
-        protected ArrayList<Event> doInBackground(Void... params) {
-            EventDbHelper helper = new EventDbHelper(MainActivity.this);
-            ArrayList<Event> events = helper.getEvents();
+        protected List<Event> doInBackground(Void... params) {
+            EventDatabase eventDatabase = EventDatabase.Companion.getInstance(MainActivity.this);
+            List<Event> events = eventDatabase.eventDao().getEvents();
             return events;
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Event> events) {
+        protected void onPostExecute(List<Event> events) {
             super.onPostExecute(events);
             if (events.isEmpty()) {
                 showEmptyMessage();

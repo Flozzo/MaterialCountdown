@@ -35,7 +35,8 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.oxapps.materialcountdown.db.EventDbHelper;
+import com.oxapps.materialcountdown.db.Event;
+import com.oxapps.materialcountdown.db.EventDatabase;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -43,24 +44,14 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 public class NewEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    @BindView(R.id.tv_new_event_title)
     EditText mTitleView;
-    @BindView(R.id.tv_new_event_desc)
     EditText mDescriptionView;
-    @BindView(R.id.tv_set_category)
     TextView mSetCategoryView;
-    @BindView(R.id.tv_set_date)
     TextView mSetDateView;
-    @BindView(R.id.tv_set_time)
     TextView mSetTimeView;
-    @BindView(R.id.toolbar_new_event)
     Toolbar mToolbar;
-    int editId = -1;
+    long editId = -1;
 
 
     private Category mCategory;
@@ -70,7 +61,14 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
-        ButterKnife.bind(this);
+
+        mTitleView = findViewById(R.id.tv_new_event_title);
+        mDescriptionView = findViewById(R.id.tv_new_event_desc);
+        mSetCategoryView = findViewById(R.id.tv_set_category);
+        mSetDateView = findViewById(R.id.tv_set_date);
+        mSetTimeView = findViewById(R.id.tv_set_time);
+        mToolbar = findViewById(R.id.toolbar_new_event);
+
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (getIntent().getAction() != null && getIntent().getAction().equals(EventDetailActivity.ACTION_EDIT)) {
@@ -109,8 +107,7 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
         return true;
     }
 
-    @OnClick(R.id.new_event_category)
-    public void setCategory() {
+    public void setCategory(View view) {
         final CategoryPickerDialog dialog = new CategoryPickerDialog(NewEventActivity.this);
         dialog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -139,8 +136,7 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
         }
     }
 
-    @OnClick(R.id.new_event_date)
-    public void setDate() {
+    public void setDate(View view) {
         DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(NewEventActivity.this, mCalendar.get(Calendar.YEAR),
                 mCalendar.get(Calendar.MONTH),
                 mCalendar.get(Calendar.DAY_OF_MONTH));
@@ -148,8 +144,7 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
         datePickerDialog.show(getFragmentManager(), "Date picker");
     }
 
-    @OnClick(R.id.new_event_time)
-    public void setTime() {
+    public void setTime(View view) {
         boolean is24HourMode = DateFormat.is24HourFormat(NewEventActivity.this);
         TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(NewEventActivity.this, mCalendar.get(Calendar.HOUR_OF_DAY), mCalendar.get(Calendar.MINUTE), is24HourMode);
         timePickerDialog.show(getFragmentManager(), "Time picker");
@@ -173,18 +168,18 @@ public class NewEventActivity extends AppCompatActivity implements DatePickerDia
             } else {
                 String name = mTitleView.getText().toString().trim();
                 String description = isEmpty(mDescriptionView) ? getString(R.string.no_description) : mDescriptionView.getText().toString().trim();
-                Event event = new Event(name, description, mCalendar.getTimeInMillis(), mCategory);
-                EventDbHelper helper = new EventDbHelper(NewEventActivity.this);
+                Event event = new Event(null, name, description, mCalendar.getTimeInMillis(), mCategory);
+                EventDatabase eventDatabase = EventDatabase.Companion.getInstance(NewEventActivity.this);
                 if (editId != -1) {
+                    // We are editing an existing event
                     event.setId(editId);
-                    helper.editEvent(event);
                     Intent i = getIntent();
-                    i.putExtra("event", event);
+//                    i.putExtra("event", event);
                     setResult(Activity.RESULT_OK, i);
                     finish();
                     return true;
                 }
-                helper.addEvent(event);
+                eventDatabase.eventDao().insertAll(event);
                 onBackPressed();
                 return true;
             }

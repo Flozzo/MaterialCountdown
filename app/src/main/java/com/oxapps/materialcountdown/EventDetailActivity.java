@@ -28,6 +28,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.oxapps.materialcountdown.db.Event;
+
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -96,7 +98,7 @@ public class EventDetailActivity extends AppCompatActivity {
         setStatusBarColor(darkColor);
         mTitleView.setText(mEvent.getName());
         mDescView.setText(mEvent.getDescription());
-        int id = mEvent.getId();
+        long id = mEvent.getId();
         Log.d(TAG, "initViews: " + id);
         setTimeTexts();
     }
@@ -105,7 +107,7 @@ public class EventDetailActivity extends AppCompatActivity {
     public void editEvent() {
         Intent intent = new Intent(this, NewEventActivity.class);
         intent.setAction(ACTION_EDIT);
-        intent.putExtra("event", mEvent);
+//        intent.putExtra("event", mEvent);
         startActivityForResult(intent, 123);
     }
 

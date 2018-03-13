@@ -25,7 +25,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.oxapps.materialcountdown.db.Event;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,11 +35,11 @@ import butterknife.ButterKnife;
 public class MainAdapter extends BaseAdapter {
 
 
-    private ArrayList<Event> mDataset;
+    private List<Event> mDataset;
     private Context mContext;
     private static final String TAG = "MainAdapter";
 
-    public MainAdapter(ArrayList<Event> events, Context context) {
+    public MainAdapter(List<Event> events, Context context) {
         this.mDataset = events;
         this.mContext = context;
     }
