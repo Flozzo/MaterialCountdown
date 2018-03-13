@@ -37,8 +37,7 @@ public class MainAdapter extends BaseAdapter {
     private Context mContext;
     private static final String TAG = "MainAdapter";
 
-    public MainAdapter(List<Event> events, Context context) {
-        this.mDataset = events;
+    public MainAdapter(Context context) {
         this.mContext = context;
     }
 
@@ -96,5 +95,16 @@ public class MainAdapter extends BaseAdapter {
         return view;
     }
 
+    void setItems(List<Event> items) {
+        this.mDataset = items;
+    }
+
+    void removeItem(int position) {
+        this.mDataset.remove(position);
+    }
+
+    void addItem(int position, Event event) {
+        this.mDataset.add(position, event);
+    }
 
 }

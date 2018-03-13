@@ -16,8 +16,8 @@
 
 package com.oxapps.materialcountdown;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,19 +29,16 @@ import android.widget.RelativeLayout;
 
 import com.oxapps.materialcountdown.creation.EventCreationActivity;
 import com.oxapps.materialcountdown.db.Event;
-import com.oxapps.materialcountdown.db.EventDatabase;
 import com.wdullaer.swipeactionadapter.SwipeActionAdapter;
 import com.wdullaer.swipeactionadapter.SwipeDirection;
 
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity implements SwipeActionAdapter.SwipeActionListener, AdapterView.OnItemClickListener {
-    ListView mListView;
-    RelativeLayout mEmptyStateView;
-    SwipeActionAdapter mSwipeAdapter;
-    MainAdapter mMainAdapter;
-    private List<Event> mEventsList;
-    PopulateListTask listTask;
+    MainViewModel viewModel;
+
+    ListView mainList;
+    RelativeLayout emptyStateView;
+    SwipeActionAdapter swipeAdapter;
+    MainAdapter mainAdapter;
 
 
     @Override
@@ -50,18 +47,33 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
-        mListView = findViewById(R.id.main_list);
-        mEmptyStateView = findViewById(R.id.main_empty_view);
-        mListView.setOnItemClickListener(MainActivity.this);
+        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+
+        mainList = findViewById(R.id.main_list);
+        emptyStateView = findViewById(R.id.main_empty_view);
+        mainList.setOnItemClickListener(MainActivity.this);
+        mainAdapter = new MainAdapter(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (listTask == null || !listTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
-            listTask = new PopulateListTask();
-            listTask.execute();
-        }
+        viewModel.getEvents().observe(this, events -> {
+            if (events == null || events.isEmpty()) {
+                showEmptyMessage();
+                return;
+            }
+            hideEmptyMessage();
+            mainAdapter.setItems(events);
+
+            swipeAdapter = new SwipeActionAdapter(mainAdapter);
+            swipeAdapter.setListView(mainList);
+            swipeAdapter.setFixedBackgrounds(true);
+            mainList.setAdapter(swipeAdapter);
+            swipeAdapter.setSwipeActionListener(MainActivity.this);
+            swipeAdapter.addBackground(SwipeDirection.DIRECTION_NORMAL_LEFT, R.layout.swipe_bg_main_left)
+                    .addBackground(SwipeDirection.DIRECTION_NORMAL_RIGHT, R.layout.swipe_bg_main_right);
+        });
     }
 
     public void createNewEvent(View v) {
@@ -81,28 +93,24 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
 
     @Override
     public void onSwipe(final int[] position, SwipeDirection[] direction) {
-        final Event event = mMainAdapter.getItem(position[0]);
-        mEventsList.remove(position[0]);
-        if (mEventsList.isEmpty()) {
+        final Event event = mainAdapter.getItem(position[0]);
+        mainAdapter.removeItem(position[0]);
+        if (mainAdapter.isEmpty()) {
             showEmptyMessage();
         }
-        mSwipeAdapter.notifyDataSetChanged();
+        swipeAdapter.notifyDataSetChanged();
         Snackbar snackbar = Snackbar.make(findViewById(R.id.coordinator_main), R.string.item_removed, Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.undo, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEventsList.add(position[0], event);
-                mSwipeAdapter.notifyDataSetChanged();
-                hideEmptyMessage();
-            }
+        snackbar.setAction(R.string.undo, v -> {
+            mainAdapter.addItem(position[0], event);
+            swipeAdapter.notifyDataSetChanged();
+            hideEmptyMessage();
         });
         snackbar.setCallback(new Snackbar.Callback() {
             @Override
             public void onDismissed(Snackbar snackbar, int swipeEvent) {
                 super.onDismissed(snackbar, swipeEvent);
                 if (swipeEvent != DISMISS_EVENT_ACTION) {
-                    EventDatabase eventDatabase = EventDatabase.Companion.getInstance(MainActivity.this);
-                    eventDatabase.eventDao().delete(event);
+                    viewModel.removeEvent(event);
                 }
 
             }
@@ -113,48 +121,18 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent i = new Intent(this, EventDetailActivity.class);
-        Event event = mEventsList.get(position);
+        Event event = mainAdapter.getItem(position);
 //        i.putExtra("event", event);
         startActivity(i);
     }
 
-    class PopulateListTask extends AsyncTask<Void, Void, List<Event>> {
-
-        @Override
-        protected List<Event> doInBackground(Void... params) {
-            EventDatabase eventDatabase = EventDatabase.Companion.getInstance(MainActivity.this);
-            List<Event> events = eventDatabase.eventDao().getEvents();
-            return events;
-        }
-
-        @Override
-        protected void onPostExecute(List<Event> events) {
-            super.onPostExecute(events);
-            if (events.isEmpty()) {
-                showEmptyMessage();
-                return;
-            }
-            hideEmptyMessage();
-            MainActivity.this.mEventsList = events;
-            mMainAdapter = new MainAdapter(events, MainActivity.this);
-
-            mSwipeAdapter = new SwipeActionAdapter(mMainAdapter);
-            mSwipeAdapter.setListView(mListView);
-            mSwipeAdapter.setFixedBackgrounds(true);
-            mListView.setAdapter(mSwipeAdapter);
-            mSwipeAdapter.setSwipeActionListener(MainActivity.this);
-            mSwipeAdapter.addBackground(SwipeDirection.DIRECTION_NORMAL_LEFT, R.layout.swipe_bg_main_left)
-                    .addBackground(SwipeDirection.DIRECTION_NORMAL_RIGHT, R.layout.swipe_bg_main_right);
-        }
-    }
-
     private void hideEmptyMessage() {
-        mListView.setVisibility(View.VISIBLE);
-        mEmptyStateView.setVisibility(View.GONE);
+        mainList.setVisibility(View.VISIBLE);
+        emptyStateView.setVisibility(View.GONE);
     }
 
     private void showEmptyMessage() {
-        mListView.setVisibility(View.GONE);
-        mEmptyStateView.setVisibility(View.VISIBLE);
+        mainList.setVisibility(View.GONE);
+        emptyStateView.setVisibility(View.VISIBLE);
     }
 }
