@@ -28,11 +28,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -45,7 +43,6 @@ import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 public class EventCreationActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     EditText mTitleView;
@@ -57,10 +54,6 @@ public class EventCreationActivity extends AppCompatActivity implements DatePick
     long editId = -1;
 
     EventCreationViewModel viewModel;
-
-
-    private Category mCategory;
-    private Calendar mCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,31 +73,19 @@ public class EventCreationActivity extends AppCompatActivity implements DatePick
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (getIntent().getAction() != null && getIntent().getAction().equals(EventDetailActivity.ACTION_EDIT)) {
             initForEdit();
-        } else {
-            initTime();
         }
     }
 
     private void initForEdit() {
         Event event = getIntent().getParcelableExtra("event");
-        mCalendar = new GregorianCalendar();
-        mCalendar.setTimeInMillis(event.getEndTime());
+        viewModel.setTimeInMillis(event.getEndTime());
         mTitleView.setText(event.getName());
         mDescriptionView.setText(event.getDescription());
-        mCategory = event.getCategory();
+        viewModel.setCategory(event.getCategory());
         setDateText();
         setTimeText();
         onCategorySet();
         editId = event.getId();
-    }
-
-
-    private void initTime() {
-        mCalendar = new GregorianCalendar();
-        mCalendar.set(Calendar.HOUR_OF_DAY, 0);
-        mCalendar.set(Calendar.MINUTE, 0);
-        mCalendar.set(Calendar.SECOND, 0);
-        mCalendar.set(Calendar.MILLISECOND, 0);
     }
 
     @Override
@@ -116,13 +97,10 @@ public class EventCreationActivity extends AppCompatActivity implements DatePick
 
     public void setCategory(View view) {
         final CategoryPickerDialog dialog = new CategoryPickerDialog(EventCreationActivity.this);
-        dialog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mCategory = Category.values()[position];
-                onCategorySet();
-                dialog.hide();
-            }
+        dialog.setOnItemClickListener((parent, view1, position, id) -> {
+            viewModel.setCategory(Category.values()[position]);
+            onCategorySet();
+            dialog.hide();
         });
 
         dialog.show();
@@ -130,11 +108,12 @@ public class EventCreationActivity extends AppCompatActivity implements DatePick
 
     private void onCategorySet() {
         //TODO: Set Toolbar colour to category colour and animate this
-        int color = ContextCompat.getColor(EventCreationActivity.this, mCategory.getColor());
-        int sbColor = ContextCompat.getColor(EventCreationActivity.this, mCategory.getStatusBarColor());
+        Category category = viewModel.getCategory();
+        int color = ContextCompat.getColor(EventCreationActivity.this, category.getColor());
+        int sbColor = ContextCompat.getColor(EventCreationActivity.this, category.getStatusBarColor());
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
         setStatusBarColor(sbColor);
-        mSetCategoryView.setText(mCategory.getName());
+        mSetCategoryView.setText(category.getName());
     }
 
     private void setStatusBarColor(int color) {
@@ -144,16 +123,18 @@ public class EventCreationActivity extends AppCompatActivity implements DatePick
     }
 
     public void setDate(View view) {
-        DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(EventCreationActivity.this, mCalendar.get(Calendar.YEAR),
-                mCalendar.get(Calendar.MONTH),
-                mCalendar.get(Calendar.DAY_OF_MONTH));
+        Calendar calendar = viewModel.getCalendar();
+        DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(EventCreationActivity.this, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.setMinDate(Calendar.getInstance());
         datePickerDialog.show(getFragmentManager(), "Date picker");
     }
 
     public void setTime(View view) {
+        Calendar calendar = viewModel.getCalendar();
         boolean is24HourMode = DateFormat.is24HourFormat(EventCreationActivity.this);
-        TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(EventCreationActivity.this, mCalendar.get(Calendar.HOUR_OF_DAY), mCalendar.get(Calendar.MINUTE), is24HourMode);
+        TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(EventCreationActivity.this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), is24HourMode);
         timePickerDialog.show(getFragmentManager(), "Time picker");
     }
 
@@ -163,35 +144,47 @@ public class EventCreationActivity extends AppCompatActivity implements DatePick
         int id = item.getItemId();
 
         if (id == R.id.action_save) {
-            int errorRes;
-            if (isEmpty(mTitleView)) {
-                errorRes = R.string.no_title_set;
-            } else if (!mCalendar.after(Calendar.getInstance())) {
-                errorRes = R.string.no_date_set;
-            } else if (mCategory == null) {
-                errorRes = R.string.no_category_set;
-            } else {
-                String name = mTitleView.getText().toString().trim();
-                String description = isEmpty(mDescriptionView) ? getString(R.string.no_description) : mDescriptionView.getText().toString().trim();
-                Event event = new Event(null, name, description, mCalendar.getTimeInMillis(), mCategory);
-                if (editId != -1) {
-                    // We are editing an existing event
-                    event.setId(editId);
-                    Intent i = getIntent();
-//                    i.putExtra("event", event);
-                    setResult(Activity.RESULT_OK, i);
-                    finish();
-                    return true;
-                }
-                viewModel.addEvent(event);
-                onBackPressed();
-                return true;
-            }
-            Snackbar.make(findViewById(R.id.coordinator_new_event), errorRes, Snackbar.LENGTH_LONG).show();
+            saveEvent();
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveEvent() {
+        boolean valid = isValidEvent();
+        if (!valid) return;
+        String name = mTitleView.getText().toString().trim();
+        String description = mDescriptionView.getText().toString().trim();
+        Event event = new Event(null, name, description, viewModel.getCalendar().getTimeInMillis(), viewModel.getCategory());
+        if (editId != -1) {
+            // We are editing an existing event
+            event.setId(editId);
+            Intent i = getIntent();
+//                    i.putExtra("event", event);
+            setResult(Activity.RESULT_OK, i);
+            finish();
+            return;
+        }
+        viewModel.addEvent(event);
+        onBackPressed();
+    }
+
+    private boolean isValidEvent() {
+        int errorRes = -1;
+        if (isEmpty(mTitleView)) {
+            errorRes = R.string.no_title_set;
+        } else if (viewModel.isDateInPast()) {
+            errorRes = R.string.no_date_set;
+        } else if (viewModel.getCategory() == null) {
+            errorRes = R.string.no_category_set;
+        }
+        if (errorRes != -1) {
+            Snackbar.make(findViewById(R.id.coordinator_new_event), errorRes, Snackbar.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 
     private boolean isEmpty(EditText editText) {
@@ -200,28 +193,25 @@ public class EventCreationActivity extends AppCompatActivity implements DatePick
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        mCalendar.set(year, monthOfYear, dayOfMonth);
+        viewModel.setDate(year, monthOfYear, dayOfMonth);
         setDateText();
 
     }
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
-        mCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        mCalendar.set(Calendar.MINUTE, minute);
+        viewModel.setTime(hourOfDay, minute);
         setTimeText();
     }
 
     private void setDateText() {
-        String dateText = DateUtils.formatDateTime(EventCreationActivity.this, mCalendar.getTimeInMillis(), DateUtils.FORMAT_SHOW_YEAR);
+        String dateText = DateUtils.formatDateTime(EventCreationActivity.this, viewModel.getCalendar().getTimeInMillis(), DateUtils.FORMAT_SHOW_YEAR);
         mSetDateView.setText(dateText);
-        Log.v("Set date", String.valueOf(mCalendar.getTimeInMillis()));
     }
 
     private void setTimeText() {
-        String timeText = DateUtils.formatDateTime(EventCreationActivity.this, mCalendar.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME);
+        String timeText = DateUtils.formatDateTime(EventCreationActivity.this, viewModel.getCalendar().getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME);
         mSetTimeView.setText(timeText);
-        Log.v("Set time", String.valueOf(mCalendar.getTimeInMillis()));
 
     }
 }
