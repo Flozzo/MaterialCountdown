@@ -42,6 +42,10 @@ android {
     }
 }
 
+androidExtensions {
+    experimental = true
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'

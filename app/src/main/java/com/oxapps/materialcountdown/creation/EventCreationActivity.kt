@@ -64,15 +64,15 @@ class EventCreationActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
     }
 
     private fun initForEdit() {
-//        val event = intent.getParcelableExtra<Event>("event")
-//        viewModel.setTimeInMillis(event.endTime)
-//        mTitleView.setText(event.name)
-//        mDescriptionView.setText(event.description)
-//        viewModel.category = event.category
-//        setDateText()
-//        setTimeText()
-//        onCategorySet()
-//        editId = event.id!!
+        val event = intent.getParcelableExtra<Event>("event")
+        viewModel.setTimeInMillis(event.endTime)
+        newEventTitleView.setText(event.name)
+        newEventDescriptionView.setText(event.description)
+        viewModel.category = event.category
+        setDateText()
+        setTimeText()
+        onCategorySet()
+        editId = event.id!!
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -153,8 +153,9 @@ class EventCreationActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         if (editId != -1L) {
             // We are editing an existing event
             event.id = editId
+            viewModel.addEvent(event)
             val i = intent
-            //                    i.putExtra("event", event);
+            i.putExtra("event", event)
             setResult(Activity.RESULT_OK, i)
             finish()
             return

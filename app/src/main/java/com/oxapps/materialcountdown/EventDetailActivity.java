@@ -109,7 +109,7 @@ public class EventDetailActivity extends AppCompatActivity {
     public void editEvent() {
         Intent intent = new Intent(this, EventCreationActivity.class);
         intent.setAction(ACTION_EDIT);
-//        intent.putExtra("event", mEvent);
+        intent.putExtra("event", mEvent);
         startActivityForResult(intent, 123);
     }
 

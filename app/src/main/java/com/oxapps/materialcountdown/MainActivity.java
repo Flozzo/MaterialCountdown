@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements SwipeActionAdapte
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent i = new Intent(this, EventDetailActivity.class);
         Event event = mainAdapter.getItem(position);
-//        i.putExtra("event", event);
+        i.putExtra("event", event);
         startActivity(i);
     }
 
