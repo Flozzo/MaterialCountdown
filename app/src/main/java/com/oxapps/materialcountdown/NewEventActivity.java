@@ -43,17 +43,22 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class NewEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    @Bind(R.id.tv_new_event_title) EditText mTitleView;
-    @Bind(R.id.tv_new_event_desc) EditText mDescriptionView;
-    @Bind(R.id.tv_set_category) TextView mSetCategoryView;
-    @Bind(R.id.tv_set_date) TextView mSetDateView;
-    @Bind(R.id.tv_set_time) TextView mSetTimeView;
-    @Bind(R.id.toolbar_new_event)
+    @BindView(R.id.tv_new_event_title)
+    EditText mTitleView;
+    @BindView(R.id.tv_new_event_desc)
+    EditText mDescriptionView;
+    @BindView(R.id.tv_set_category)
+    TextView mSetCategoryView;
+    @BindView(R.id.tv_set_date)
+    TextView mSetDateView;
+    @BindView(R.id.tv_set_time)
+    TextView mSetTimeView;
+    @BindView(R.id.toolbar_new_event)
     Toolbar mToolbar;
     int editId = -1;
 

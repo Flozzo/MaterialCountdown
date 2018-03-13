@@ -30,17 +30,23 @@ import android.widget.TextView;
 
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class EventDetailActivity extends AppCompatActivity {
-    @Bind(R.id.tv_event_detail_title) TextView mTitleView;
-    @Bind(R.id.tv_event_detail_desc) TextView mDescView;
-    @Bind(R.id.event_detail_days) TextView mDaysView;
-    @Bind(R.id.event_detail_hours) TextView mHoursView;
-    @Bind(R.id.event_detail_minutes) TextView mMinutesView;
-    @Bind(R.id.event_detail_seconds) TextView mSecondsView;
+    @BindView(R.id.tv_event_detail_title)
+    TextView mTitleView;
+    @BindView(R.id.tv_event_detail_desc)
+    TextView mDescView;
+    @BindView(R.id.event_detail_days)
+    TextView mDaysView;
+    @BindView(R.id.event_detail_hours)
+    TextView mHoursView;
+    @BindView(R.id.event_detail_minutes)
+    TextView mMinutesView;
+    @BindView(R.id.event_detail_seconds)
+    TextView mSecondsView;
 
     private boolean daysEnabled = true;
     private static final String TAG = "EventDetailActivity";

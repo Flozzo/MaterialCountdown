@@ -35,13 +35,15 @@ import com.wdullaer.swipeactionadapter.SwipeDirection;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements SwipeActionAdapter.SwipeActionListener, AdapterView.OnItemClickListener {
-    @Bind(R.id.main_list) ListView mListView;
-    @Bind(R.id.main_empty_view) RelativeLayout mEmptyStateView;
+    @BindView(R.id.main_list)
+    ListView mListView;
+    @BindView(R.id.main_empty_view)
+    RelativeLayout mEmptyStateView;
     SwipeActionAdapter mSwipeAdapter;
     MainAdapter mMainAdapter;
     private static final String TAG = "MainActivity";

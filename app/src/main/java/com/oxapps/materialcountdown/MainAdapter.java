@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainAdapter extends BaseAdapter {
@@ -56,11 +56,16 @@ public class MainAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        @Bind(R.id.event_name) TextView nameView;
-        @Bind(R.id.event_desc) TextView descriptionView;
-        @Bind(R.id.event_days) TextView daysCountView;
-        @Bind(R.id.event_days_remaining) TextView daysTextView;
-        @Bind(R.id.iv_event_logo) ImageView logoView;
+        @BindView(R.id.event_name)
+        TextView nameView;
+        @BindView(R.id.event_desc)
+        TextView descriptionView;
+        @BindView(R.id.event_days)
+        TextView daysCountView;
+        @BindView(R.id.event_days_remaining)
+        TextView daysTextView;
+        @BindView(R.id.iv_event_logo)
+        ImageView logoView;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
