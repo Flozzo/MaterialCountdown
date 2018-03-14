@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity(), SwipeActionAdapter.SwipeActionListener
                 return@Observer
             }
             hideEmptyMessage()
-            mainAdapter.setItems(events)
+            mainAdapter.setItems(events.toMutableList())
             mainList.adapter = swipeAdapter
         })
     }
