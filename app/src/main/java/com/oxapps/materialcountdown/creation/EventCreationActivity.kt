@@ -29,23 +29,20 @@ import android.text.format.DateUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-
-import com.oxapps.materialcountdown.detail.EventDetailActivity
 import com.oxapps.materialcountdown.R
 import com.oxapps.materialcountdown.db.Event
+import com.oxapps.materialcountdown.detail.EventDetailActivity
 import com.oxapps.materialcountdown.model.Category
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
-import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
-
 import kotlinx.android.synthetic.main.activity_new_event.*
 import kotlinx.android.synthetic.main.content_new_event.*
 import kotlinx.android.synthetic.main.toolbar_new_event.*
-
-import java.util.Calendar
+import java.util.*
 
 class EventCreationActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
+
     private var editId: Long = -1
 
     private lateinit var viewModel: EventCreationViewModel
@@ -188,7 +185,7 @@ class EventCreationActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
 
     }
 
-    override fun onTimeSet(view: RadialPickerLayout, hourOfDay: Int, minute: Int, second: Int) {
+    override fun onTimeSet(view: TimePickerDialog?, hourOfDay: Int, minute: Int, second: Int) {
         viewModel.setTime(hourOfDay, minute)
         setTimeText()
     }
