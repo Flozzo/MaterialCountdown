@@ -30,7 +30,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 
-import com.oxapps.materialcountdown.EventDetailActivity
+import com.oxapps.materialcountdown.detail.EventDetailActivity
 import com.oxapps.materialcountdown.R
 import com.oxapps.materialcountdown.db.Event
 import com.oxapps.materialcountdown.model.Category

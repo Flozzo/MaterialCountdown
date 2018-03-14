@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.oxapps.materialcountdown;
+package com.oxapps.materialcountdown.detail;
 
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -24,48 +24,42 @@ import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.oxapps.materialcountdown.R;
 import com.oxapps.materialcountdown.creation.EventCreationActivity;
 import com.oxapps.materialcountdown.db.Event;
 import com.oxapps.materialcountdown.model.Category;
 
 import java.util.concurrent.TimeUnit;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 public class EventDetailActivity extends AppCompatActivity {
-    @BindView(R.id.tv_event_detail_title)
-    TextView mTitleView;
-    @BindView(R.id.tv_event_detail_desc)
-    TextView mDescView;
-    @BindView(R.id.event_detail_days)
-    TextView mDaysView;
-    @BindView(R.id.event_detail_hours)
-    TextView mHoursView;
-    @BindView(R.id.event_detail_minutes)
-    TextView mMinutesView;
-    @BindView(R.id.event_detail_seconds)
-    TextView mSecondsView;
+    TextView eventDetailTitle;
+    TextView eventDetailDescription;
+    TextView eventDetailDays;
+    TextView eventDetailHours;
+    TextView eventDetailMinutes;
+    TextView eventDetailSeconds;
 
     private boolean daysEnabled = true;
-    private static final String TAG = "EventDetailActivity";
     CountDownTimer timer;
     public final static String ACTION_EDIT = "edit";
-    private Event mEvent;
+    private Event event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_event_detail);
+        Toolbar toolbar = findViewById(R.id.toolbar_event_detail);
         setSupportActionBar(toolbar);
-        ButterKnife.bind(this);
-        mEvent = getIntent().getParcelableExtra("event");
+        eventDetailTitle = findViewById(R.id.eventDetailTitle);
+        eventDetailDescription = findViewById(R.id.eventDetailDescription);
+        eventDetailDays = findViewById(R.id.eventDetailDays);
+        eventDetailHours = findViewById(R.id.eventDetailHours);
+        eventDetailMinutes = findViewById(R.id.eventDetailMinutes);
+        eventDetailSeconds = findViewById(R.id.eventDetailSeconds);
+        event = getIntent().getParcelableExtra("event");
         initViews();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -73,7 +67,7 @@ public class EventDetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        timer = new CountDownTimer(mEvent.getRemainingTime(), 1000) {
+        timer = new CountDownTimer(event.getRemainingTime(), 1000) {
 
             public void onTick(long millisUntilFinished) {
                 setTimeTexts();
@@ -93,36 +87,34 @@ public class EventDetailActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        Category category = mEvent.getCategory();
+        Category category = event.getCategory();
         int color = ContextCompat.getColor(EventDetailActivity.this, category.getColor());
         int darkColor = ContextCompat.getColor(EventDetailActivity.this, category.getStatusBarColor());
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
         setStatusBarColor(darkColor);
-        mTitleView.setText(mEvent.getName());
-        mDescView.setText(mEvent.getDescription());
-        long id = mEvent.getId();
-        Log.d(TAG, "initViews: " + id);
+        eventDetailTitle.setText(event.getName());
+        eventDetailDescription.setText(event.getDescription());
+        long id = event.getId();
         setTimeTexts();
     }
 
-    @OnClick(R.id.fab_event_detail_edit)
-    public void editEvent() {
+    public void editEvent(View view) {
         Intent intent = new Intent(this, EventCreationActivity.class);
         intent.setAction(ACTION_EDIT);
-        intent.putExtra("event", mEvent);
+        intent.putExtra("event", event);
         startActivityForResult(intent, 123);
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            mEvent = data.getParcelableExtra("event");
+            event = data.getParcelableExtra("event");
             initViews();
         }
     }
 
     private void setTimeTexts() {
-        long remaining = mEvent.getRemainingTime();
+        long remaining = event.getRemainingTime();
         long days = TimeUnit.MILLISECONDS.toDays(remaining);
         remaining = remaining - TimeUnit.DAYS.toMillis(days);
         long hours = TimeUnit.MILLISECONDS.toHours(remaining);
@@ -132,16 +124,16 @@ public class EventDetailActivity extends AppCompatActivity {
         long seconds = remaining / 1000;
 
         if (daysEnabled && days > 0) {
-            mDaysView.setText(days + " " + getDayString(days));
+            eventDetailDays.setText(days + " " + getDayString(days));
         } else {
-            mDaysView.setVisibility(View.GONE);
+            eventDetailDays.setVisibility(View.GONE);
             daysEnabled = false;
         }
         String minuteString = minutes < 10L ? "0" + minutes : String.valueOf(minutes);
         String secondString = seconds < 10L ? "0" + seconds : String.valueOf(seconds);
-        mHoursView.setText(hours + "");
-        mMinutesView.setText(minuteString);
-        mSecondsView.setText(secondString);
+        eventDetailHours.setText(hours + "");
+        eventDetailMinutes.setText(minuteString);
+        eventDetailSeconds.setText(secondString);
 
     }
 

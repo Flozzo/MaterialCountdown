@@ -20,7 +20,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.oxapps.materialcountdown.EventDetailActivity"
+    tools:context="com.oxapps.materialcountdown.detail.EventDetailActivity"
     tools:showIn="@layout/activity_event_detail">
 
     <!-- Toolbar space -->
@@ -35,7 +35,7 @@
         android:focusableInTouchMode="true" />
 
     <TextView
-        android:id="@+id/tv_event_detail_title"
+        android:id="@+id/eventDetailTitle"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         tools:text="@string/event_name"
@@ -47,7 +47,7 @@
         android:layout_height="8dp" />
 
     <TextView
-        android:id="@+id/tv_event_detail_desc"
+        android:id="@+id/eventDetailDescription"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         tools:text="@string/description"

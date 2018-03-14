@@ -26,6 +26,7 @@ import android.view.View
 import android.widget.AdapterView
 
 import com.oxapps.materialcountdown.creation.EventCreationActivity
+import com.oxapps.materialcountdown.detail.EventDetailActivity
 import com.wdullaer.swipeactionadapter.SwipeActionAdapter
 import com.wdullaer.swipeactionadapter.SwipeDirection
 import kotlinx.android.synthetic.main.activity_main.*
