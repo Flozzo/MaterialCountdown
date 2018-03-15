@@ -27,7 +27,7 @@ import android.view.View
 
 import com.oxapps.materialcountdown.R
 import com.oxapps.materialcountdown.creation.EventCreationActivity
-import com.oxapps.materialcountdown.db.Event
+import com.oxapps.materialcountdown.model.Event
 import kotlinx.android.synthetic.main.activity_event_detail.*
 import kotlinx.android.synthetic.main.content_event_detail.*
 import kotlinx.android.synthetic.main.toolbar_event_detail.*

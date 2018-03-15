@@ -6,6 +6,7 @@ import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 import android.content.Context
 import com.oxapps.materialcountdown.db.util.CategoryTypeConverter
+import com.oxapps.materialcountdown.model.Event
 
 
 @Database(entities = [(Event::class)], version = 1)

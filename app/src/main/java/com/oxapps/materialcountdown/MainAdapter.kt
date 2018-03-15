@@ -23,7 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 
-import com.oxapps.materialcountdown.db.Event
+import com.oxapps.materialcountdown.model.Event
 import com.oxapps.materialcountdown.util.getRemainingTimeValues
 import kotlinx.android.synthetic.main.event_item.view.*
 

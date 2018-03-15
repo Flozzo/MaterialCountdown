@@ -2,9 +2,9 @@ package com.oxapps.materialcountdown.creation
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
-import com.oxapps.materialcountdown.db.Event
 import com.oxapps.materialcountdown.db.EventDatabase
 import com.oxapps.materialcountdown.model.Category
+import com.oxapps.materialcountdown.model.Event
 import java.util.*
 import java.util.concurrent.Executors
 

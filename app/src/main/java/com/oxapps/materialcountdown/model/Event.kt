@@ -1,4 +1,4 @@
-package com.oxapps.materialcountdown.db
+package com.oxapps.materialcountdown.model
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
@@ -8,7 +8,6 @@ import com.oxapps.materialcountdown.db.util.CATEGORY
 import com.oxapps.materialcountdown.db.util.DESC
 import com.oxapps.materialcountdown.db.util.END
 import com.oxapps.materialcountdown.db.util.NAME
-import com.oxapps.materialcountdown.model.Category
 import kotlinx.android.parcel.Parcelize
 
 @Entity(tableName = "events")

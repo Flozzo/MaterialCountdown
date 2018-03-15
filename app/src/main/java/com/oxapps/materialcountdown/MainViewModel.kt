@@ -3,8 +3,8 @@ package com.oxapps.materialcountdown
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
-import com.oxapps.materialcountdown.db.Event
 import com.oxapps.materialcountdown.db.EventDatabase
+import com.oxapps.materialcountdown.model.Event
 import java.util.concurrent.Executors
 
 /**

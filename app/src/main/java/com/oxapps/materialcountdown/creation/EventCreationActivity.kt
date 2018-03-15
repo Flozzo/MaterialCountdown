@@ -30,9 +30,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.oxapps.materialcountdown.R
-import com.oxapps.materialcountdown.db.Event
 import com.oxapps.materialcountdown.detail.EventDetailActivity
 import com.oxapps.materialcountdown.model.Category
+import com.oxapps.materialcountdown.model.Event
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import kotlinx.android.synthetic.main.activity_new_event.*
@@ -146,7 +146,13 @@ class EventCreationActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         val name = newEventTitleView.text.toString().trim { it <= ' ' }
         val description = newEventDescriptionView.text.toString().trim { it <= ' ' }
         val event =
-            Event(null, name, description, viewModel.calendar.timeInMillis, viewModel.category!!)
+            Event(
+                null,
+                name,
+                description,
+                viewModel.calendar.timeInMillis,
+                viewModel.category!!
+            )
         if (editId != -1L) {
             // We are editing an existing event
             event.id = editId
