@@ -22,39 +22,68 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.TextView
 
 import com.oxapps.materialcountdown.model.Event
 import com.oxapps.materialcountdown.util.getRemainingTimeValues
-import kotlinx.android.synthetic.main.event_item.view.*
+import com.oxapps.materialcountdown.view.CircularIconImageView
+import kotlinx.android.synthetic.main.event_item_multi.view.*
+import kotlinx.android.synthetic.main.event_item_single.view.*
 
 class MainAdapter(private val mContext: Context) : BaseAdapter() {
 
     private var dataset: MutableList<Event>? = null
 
-    internal class ViewHolder(view: View) {
-        val adapterEventName = view.adapterEventName!!
+    internal abstract class ListItemViewHolder {
+        abstract val adapterEventName: TextView
+        abstract val adapterTimeCount: TextView
+        abstract val adapterTimeText: TextView
+        abstract val adapterLogo: CircularIconImageView
+    }
+
+    internal class MultiLineViewHolder(view: View) : ListItemViewHolder() {
+        override val adapterEventName = view.adapterEventName!!
         val adapterEventDescription = view.adapterEventDescription!!
-        val adapterTimeCount = view.adapterTimeCount!!
-        val adapterTimeText = view.adapterTimeText!!
-        val adapterLogo = view.adapterLogo!!
+        override val adapterTimeCount = view.adapterTimeCount!!
+        override val adapterTimeText = view.adapterTimeText!!
+        override val adapterLogo = view.adapterLogo!!
+    }
+
+    internal class SingleLineViewHolder(view: View) : ListItemViewHolder() {
+        override val adapterEventName = view.adapterEventNameSingle!!
+        override val adapterTimeCount = view.adapterTimeCountSingle!!
+        override val adapterTimeText = view.adapterTimeTextSingle!!
+        override val adapterLogo = view.adapterLogoSingle!!
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var view = convertView
-        val holder: ViewHolder
-        if (view != null) {
-            holder = view.tag as ViewHolder
-        } else {
-            view = LayoutInflater.from(mContext).inflate(R.layout.event_item, parent, false)
-            holder = ViewHolder(view)
-            view!!.tag = holder
-        }
         val event = dataset!![position]
         val (unitsLeft, unitText) = getRemainingTimeValues(event.getRemainingTime())
         val category = event.category
+        val holder: ListItemViewHolder
 
+        if (event.description.isNullOrBlank()) {
+            if (view != null) {
+                holder = view.tag as SingleLineViewHolder
+            } else {
+                view = LayoutInflater.from(mContext)
+                    .inflate(R.layout.event_item_single, parent, false)
+                holder = SingleLineViewHolder(view)
+                view!!.tag = holder
+            }
+        } else {
+            if (view != null) {
+                holder = view.tag as MultiLineViewHolder
+            } else {
+                view = LayoutInflater.from(mContext)
+                    .inflate(R.layout.event_item_multi, parent, false)
+                holder = MultiLineViewHolder(view)
+                view!!.tag = holder
+            }
+            holder.adapterEventDescription.text = event.description
+        }
         holder.adapterEventName.text = event.name
-        holder.adapterEventDescription.text = event.description
         holder.adapterTimeCount.text = unitsLeft.toString()
         holder.adapterTimeText.setText(unitText)
         holder.adapterLogo.setImageResource(category.icon)
