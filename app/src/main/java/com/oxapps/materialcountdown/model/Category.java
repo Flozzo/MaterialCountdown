@@ -18,14 +18,10 @@ package com.oxapps.materialcountdown.model;
 
 import com.oxapps.materialcountdown.R;
 
-/**
- * Created by flynn on 22/11/15.
- */
 public enum Category {
 
     ACADEMIC(R.string.academic, R.color.material_brown_500, R.color.material_brown_700, R.drawable.ic_academic),
     BIRTHDAY(R.string.birthday, R.color.material_red_500, R.color.material_red_700, R.drawable.ic_birthday),
-    /*CHILD(R.string.child, R.color.material_orange_500, R.drawable.)*/
     ENTERTAINMENT(R.string.entertainment, R.color.material_blue_500, R.color.material_blue_700, R.drawable.ic_movies),
     OTHER(R.string.other, R.color.material_green_500, R.color.material_green_700, R.drawable.ic_other),
     PRODUCT_RELEASE(R.string.product_release, R.color.material_yellow_500, R.color.material_yellow_700, R.drawable.ic_new_releases),
@@ -41,7 +37,7 @@ public enum Category {
     private int statusBarColor;
     private final int icon;
 
-    private Category(int name, int color, int statusBarColor, int icon) {
+    Category(int name, int color, int statusBarColor, int icon) {
         this.name = name;
         this.color = color;
         this.statusBarColor = statusBarColor;

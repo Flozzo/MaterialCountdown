@@ -31,7 +31,6 @@ import android.view.MenuItem
 import android.view.View
 import com.oxapps.materialcountdown.R
 import com.oxapps.materialcountdown.detail.EventDetailActivity
-import com.oxapps.materialcountdown.model.Category
 import com.oxapps.materialcountdown.model.Event
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
@@ -80,8 +79,8 @@ class EventCreationActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
 
     fun setCategory(view: View) {
         val dialog = CategoryPickerDialog(this@EventCreationActivity)
-        dialog.setOnItemClickListener { _, _, position, _ ->
-            viewModel.category = Category.values()[position]
+        dialog.onCategorySet = { category ->
+            viewModel.category = category
             onCategorySet()
             dialog.hide()
         }
