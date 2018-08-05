@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2016 Flynn van Os
+  ~ Copyright 2018 Flynn van Os
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.oxapps.materialcountdown.NewEventActivity"
+    tools:context="com.oxapps.materialcountdown.creation.EventCreationActivity"
     tools:showIn="@layout/activity_new_event">
 
     <!-- Toolbar space -->
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/tv_new_event_title"
+            android:id="@+id/newEventTitleView"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:hint="@string/event_name"
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/tv_new_event_desc"
+            android:id="@+id/newEventDescriptionView"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:hint="@string/description"

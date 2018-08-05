@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2016 Flynn van Os
+  ~ Copyright 2018 Flynn van Os
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -23,8 +23,8 @@
     android:paddingRight="16dp"
                 android:background="@drawable/event_item_background">
 
-    <com.oxapps.materialcountdown.CircularIconImageView
-        android:id="@+id/iv_event_logo"
+    <com.oxapps.materialcountdown.view.CircularIconImageView
+        android:id="@+id/adapterLogo"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:padding="8dp"
@@ -34,7 +34,7 @@
         tools:src="@drawable/ic_new_event"/>
 
     <TextView
-        android:id="@+id/event_name"
+        android:id="@+id/adapterEventName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
@@ -44,11 +44,11 @@
         android:textColor="@color/text_primary"/>
 
     <TextView
-        android:id="@+id/event_desc"
+        android:id="@+id/adapterEventDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="16dp"
-        android:layout_alignLeft="@+id/event_name"
+        android:layout_alignLeft="@+id/adapterEventName"
         android:maxLines="1"
         android:layout_alignParentBottom="true"
         tools:text="Description goes here yes very good"
@@ -64,7 +64,7 @@
         android:layout_marginLeft="16dp">
 
         <TextView
-            android:id="@+id/event_days"
+            android:id="@+id/adapterTimeCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="22"
@@ -76,7 +76,7 @@
             android:textColor="@color/text_primary" />
 
         <TextView
-            android:id="@+id/event_days_remaining"
+            android:id="@+id/adapterTimeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2016 Flynn van Os
+  ~ Copyright 2018 Flynn van Os
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_main"
+            android:id="@+id/mainToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -39,11 +39,11 @@
     </android.support.design.widget.AppBarLayout>
 
     <ListView
-        android:id="@+id/main_list"
+        android:id="@+id/mainList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/event_item">
+        tools:listitem="@layout/event_item_multi">
 
     </ListView>
 
@@ -55,6 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_new_event" />
+        android:src="@drawable/ic_new_event"
+        android:onClick="createNewEvent" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2016 Flynn van Os
+  ~ Copyright 2018 Flynn van Os
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_new_event"
+    android:id="@+id/newEventCoordinatorView"
     android:fitsSystemWindows="true"
-    tools:context="com.oxapps.materialcountdown.NewEventActivity">
+    tools:context="com.oxapps.materialcountdown.creation.EventCreationActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_new_event"
+            android:id="@+id/newEventToolbar"
             android:layout_width="match_parent"
             android:minHeight="?android:attr/actionBarSize"
             android:layout_height="wrap_content"

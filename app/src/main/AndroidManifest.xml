@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2016 Flynn van Os
+  ~ Copyright 2018 Flynn van Os
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewEventActivity"
+            android:name=".creation.EventCreationActivity"
             android:label="@string/title_activity_new_event"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -44,7 +44,7 @@
                 android:value="com.oxapps.materialcountdown.MainActivity" />
         </activity>
         <activity
-            android:name=".EventDetailActivity"
+            android:name=".detail.EventDetailActivity"
             android:label="@string/title_activity_event_detail"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
