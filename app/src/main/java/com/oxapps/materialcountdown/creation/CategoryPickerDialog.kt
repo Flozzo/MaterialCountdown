@@ -67,8 +67,8 @@ class CategoryPickerDialog(context: Context) : AppCompatDialog(context) {
     }
 
     private fun getGreyDrawable(icon: Int): Drawable {
-        val d = ContextCompat.getDrawable(context, icon)!!
-        d.setColorFilter(-0x76000000, PorterDuff.Mode.MULTIPLY)
-        return d
+        val drawable = ContextCompat.getDrawable(context, icon)!!.mutate()
+        drawable.setColorFilter(-0x76000000, PorterDuff.Mode.MULTIPLY)
+        return drawable
     }
 }
