@@ -12,7 +12,7 @@ import com.oxapps.materialcountdown.model.Event
 @Dao
 interface EventDao {
 
-    @Query("SELECT * FROM events")
+    @Query("SELECT * FROM events ORDER BY `end`")
     fun getEvents(): LiveData<List<Event>>
 
     @Insert(onConflict = REPLACE)
